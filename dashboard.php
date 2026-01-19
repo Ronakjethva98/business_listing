@@ -80,9 +80,23 @@ $result = mysqli_query($conn, $sql);
 
 <!-- CONTENT -->
 <div class="content">
+    <!-- DELETE SUCCESS MESSAGE -->
     <?php if (isset($_GET['msg']) && $_GET['msg'] == 'deleted'): ?>
-        <div style="background: #d1fae5; padding: 15px; border-radius: 10px; margin-bottom: 20px; color: #059669; font-weight: 600; text-align: center; border: 2px solid #10b981;">
+        <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; color: #059669; font-weight: 600; text-align: center; border: 2px solid #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">
             ✓ Business deleted successfully!
+        </div>
+    <?php endif; ?>
+    
+    <!-- DELETE ERROR MESSAGES -->
+    <?php if (isset($_GET['error'])): ?>
+        <div style="background: #fee2e2; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; color: #dc2626; font-weight: 600; text-align: center; border: 2px solid #ef4444;">
+            <?php if ($_GET['error'] == 'notfound'): ?>
+                ✗ Business not found!
+            <?php elseif ($_GET['error'] == 'unauthorized'): ?>
+                ✗ You don't have permission to delete this business!
+            <?php else: ?>
+                ✗ An error occurred while deleting the business.
+            <?php endif; ?>
         </div>
     <?php endif; ?>
     
@@ -133,9 +147,7 @@ $result = mysqli_query($conn, $sql);
                                 ✏️ Edit
                             </a>
 
-                            <a href="delete_business.php?id=<?php echo $b['id']; ?>"
-                               class="action-delete"
-                               onclick="return confirm('Are you sure you want to delete this business?')">
+                            <a href="delete_business.php?id=<?php echo $b['id']; ?>" class="action-delete">
                                 🗑️ Delete
                             </a>
                         </div>
