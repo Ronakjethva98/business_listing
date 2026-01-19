@@ -41,18 +41,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <h2>Business</h2>
-    <a href="visitor.php">🏠 Home</a>
-    <a href="login.php">🏢 Company Login</a>
-    <a href="login.php">👑 Admin Login</a>
-    <a href="about.php">ℹ️ About</a>
-</div>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-header">
+            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-menu">
+                <a href="visitor.php">🏠 Home</a>
+                <a href="login.php?role=company">🏢 Company Login</a>
+                <a href="register.php">📝 Register</a>
+                <a href="login.php?role=admin">👑 Admin Login</a>
+                <a href="about.php">ℹ️ About</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
 <!-- TOPBAR -->
 <div class="topbar">
-    🏢 Company Registration
+    <div class="topbar-container">
+        🏢 Company Registration
+    </div>
 </div>
 
 <!-- CONTENT -->

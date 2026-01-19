@@ -45,32 +45,37 @@ $result = mysqli_query($conn, $sql);
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <h2><?php echo ucfirst($_SESSION['role']); ?></h2>
-
-    <a href="dashboard.php">🏠 Home</a>
-
-    <?php if ($_SESSION['role'] === 'company') { ?>
-        <a href="add_business.php">➕ Add Business</a>
-        <a href="view_inquiries.php">📨 View Inquiries</a>
-        <a href="about.php">ℹ️ About</a>
-    <?php } ?>
-    <?php if ($_SESSION['role'] === 'admin') { ?>
-    <a href="manage_users.php">👥 Manage Accounts</a>
-      <a href="view_admin.php">👤 View Admin</a>
-      <a href="add_admin.php">➕ Add Admin</a>
-      <a href="about.php">ℹ️ About</a>
-    <?php } ?>
-
-
-
-    <a href="logout.php">🚪 Logout</a>
-</div>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-header">
+            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-menu">
+                <div class="navbar-user">👤 <?php echo ucfirst($_SESSION['role']); ?></div>
+                <a href="dashboard.php">🏠 Home</a>
+                
+                <?php if ($_SESSION['role'] === 'company') { ?>
+                    <a href="add_business.php">➕ Add Business</a>
+                    <a href="view_inquiries.php">📨 View Inquiries</a>
+                    <a href="about.php">ℹ️ About</a>
+                <?php } elseif ($_SESSION['role'] === 'admin') { ?>
+                    <a href="manage_users.php">👥 Manage Users</a>
+                    <a href="view_admin.php">👤 View Admin</a>
+                    <a href="add_admin.php">➕ Add Admin</a>
+                    <a href="about.php">ℹ️ About</a>
+                <?php } ?>
+                
+                <a href="logout.php" class="logout-btn">🚪 Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
 <!-- TOPBAR -->
 <div class="topbar">
-     Welcome, <?php echo ucfirst($_SESSION['role']); ?> 👋
+    <div class="topbar-container">
+        Welcome, <?php echo ucfirst($_SESSION['role']); ?> 👋
+    </div>
 </div>
 
 <!-- CONTENT -->
