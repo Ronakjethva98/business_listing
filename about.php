@@ -226,23 +226,33 @@ $userRole = $_SESSION['role'] ?? 'normal';
             <div class="feature-grid">
                 <div class="feature-item">
                     <div class="feature-icon">🔍</div>
-                    <h5>Search & Discover</h5>
-                    <p>Find businesses by name or category easily</p>
+                    <h5>Advanced Search & Filter</h5>
+                    <p>Find businesses by name or filter by category with instant results</p>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">✉️</div>
-                    <h5>Send Inquiries</h5>
-                    <p>Contact businesses directly through the platform</p>
+                    <h5>Inquiry System</h5>
+                    <p>Send inquiries to businesses; companies and admins can view all inquiries</p>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">📊</div>
-                    <h5>Manage Listings</h5>
-                    <p>Companies can add and update their business info</p>
+                    <div class="feature-icon">🖼️</div>
+                    <h5>Business Listings with Images</h5>
+                    <p>Create, edit, delete listings with image upload support</p>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">👥</div>
+                    <div class="feature-icon">�</div>
                     <h5>User Management</h5>
-                    <p>Admins can manage all users and content</p>
+                    <p>Admins can view and manage company users</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">�</div>
+                    <h5>Admin Management</h5>
+                    <p>Add, view, edit, and manage multiple admin accounts</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔐</div>
+                    <h5>Role-Based Access</h5>
+                    <p>Secure authentication with distinct permissions for visitors, companies, and admins</p>
                 </div>
             </div>
         </div>
@@ -268,11 +278,15 @@ $userRole = $_SESSION['role'] ?? 'normal';
                 <p><strong>What you can do:</strong></p>
                 <ul>
                     <li>Create an account by clicking "Company Login" and then registering</li>
-                    <li>Add your business listings with images and details</li>
-                    <li>Edit and update your business information anytime</li>
+                    <li>Access a personalized dashboard showing only your business listings</li>
+                    <li>Add business listings with images, name, category, address, phone, and description</li>
+                    <li>Upload and manage business images (supports image file uploads)</li>
+                    <li>Edit and update your business information and images anytime</li>
                     <li>Delete your business listings if needed</li>
+                    <li>Search and filter your own businesses by name or category</li>
                     <li>Manage multiple businesses under one account</li>
                     <li><strong>View all customer inquiries</strong> sent to your businesses</li>
+                    <li>Navigate easily with role-specific navigation menu</li>
                 </ul>
             </div>
 
@@ -280,11 +294,19 @@ $userRole = $_SESSION['role'] ?? 'normal';
                 <h4>👑 Admin Users</h4>
                 <p><strong>What you can do:</strong></p>
                 <ul>
-                    <li>View and manage all business listings</li>
-                    <li>Manage company user accounts (view and delete)</li>
-                    <li><strong>View all customer inquiries</strong> from all businesses</li>
-                    <li>Delete inquiries, inappropriate content, or spam users</li>
-                    <li>Full control over the platform</li>
+                    <li>View and manage all business listings from all companies</li>
+                    <li>Search and filter all businesses across the platform</li>
+                    <li>Access "Manage Users" to view all company accounts</li>
+                    <li>Delete company user accounts when necessary</li>
+                    <li><strong>View Admin</strong> - See all administrator accounts in the system</li>
+                    <li><strong>Add Admin</strong> - Create new administrator accounts</li>
+                    <li><strong>Edit Admin</strong> - Modify existing admin account details</li>
+                    <li>Delete admin accounts (except your own)</li>
+                    <li><strong>View all customer inquiries</strong> from all businesses across the platform</li>
+                    <li>Delete inappropriate content, spam, or unwanted inquiries</li>
+                    <li>Edit and delete any business listing</li>
+                    <li>Full administrative control over the entire platform</li>
+                    <li>Role-specific admin navigation and dashboard</li>
                 </ul>
             </div>
         </div>
@@ -304,24 +326,40 @@ $userRole = $_SESSION['role'] ?? 'normal';
 
             <h3>For Companies (Listing Your Business)</h3>
             <ol class="steps-list">
-                <li>Click <strong>"Company Login"</strong> in the sidebar</li>
+                <li>Click <strong>"Company Login"</strong> in the navigation menu</li>
                 <li>If you're new, click <strong>"Register here"</strong> to create an account</li>
-                <li>Once logged in, click <strong>"Add Business"</strong> to create a new listing</li>
-                <li>Fill in your business details: name, category, address, phone, description, and upload an image</li>
+                <li>Once logged in, you'll see your personalized dashboard with all your businesses</li>
+                <li>Click <strong>"Add Business"</strong> in the navigation to create a new listing</li>
+                <li>Fill in your business details: name, category, address, phone, and description</li>
+                <li>Click <strong>"Choose File"</strong> to upload a business image (JPG, PNG, etc.)</li>
                 <li>Click <strong>"Save Business"</strong> to publish your listing</li>
-                <li>View all your businesses in <strong>"My Businesses"</strong></li>
-                <li>Click <strong>"Edit"</strong> to update or <strong>"Delete"</strong> to remove a listing</li>
-                <li>Use <strong>"View Inquiries"</strong> to see all customer inquiries for your businesses</li>
+                <li>View all your businesses in your dashboard (Home)</li>
+                <li>Use the <strong>Search Bar</strong> and <strong>Category Filter</strong> to find specific businesses</li>
+                <li>Click <strong>"Edit"</strong> on any business card to update information or change the image</li>
+                <li>Click <strong>"Delete"</strong> to remove a listing (you'll see a confirmation page)</li>
+                <li>Click <strong>"View Inquiries"</strong> in the navigation to see all customer inquiries for your businesses</li>
+                <li>Review inquiry details including customer name, email, phone, message, and submission date</li>
             </ol>
 
             <h3>For Administrators</h3>
             <ol class="steps-list">
-                <li>Click <strong>"Admin Login"</strong> in the sidebar</li>
+                <li>Click <strong>"Admin Login"</strong> in the navigation menu</li>
                 <li>Enter your admin credentials</li>
-                <li>Use <strong>"All Businesses"</strong> to view and manage all listings</li>
-                <li>Use <strong>"Manage Users"</strong> to view and delete company accounts</li>
+                <li>Access your admin dashboard to view all businesses across the platform</li>
+                <li>Use <strong>"Manage Users"</strong> to view all company accounts and their details</li>
+                <li>Delete company accounts if necessary from the Manage Users page</li>
+                <li>Click <strong>"View Admin"</strong> to see all administrator accounts in the system</li>
+                <li>View admin details including username and current user indicator</li>
+                <li>Click <strong>"Edit"</strong> on any admin account to modify their details (username, password)</li>
+                <li>Click <strong>"Delete"</strong> to remove admin accounts (you cannot delete your own account)</li>
+                <li>Use <strong>"Add Admin"</strong> to create new administrator accounts</li>
+                <li>Fill in username, password, and confirm password for new admins</li>
+                <li>Use <strong>Search and Category Filter</strong> to find specific businesses</li>
+                <li>Click <strong>"Edit"</strong> on any business to modify its details</li>
+                <li>Click <strong>"Delete"</strong> to remove inappropriate or spam business listings</li>
                 <li>Use <strong>"View Inquiries"</strong> to see all customer inquiries from all businesses</li>
-                <li>Delete any inappropriate content or spam users</li>
+                <li>Delete inappropriate inquiries or spam messages as needed</li>
+                <li>Monitor and maintain the overall quality and security of the platform</li>
             </ol>
         </div>
 
@@ -329,11 +367,20 @@ $userRole = $_SESSION['role'] ?? 'normal';
         <div class="about-section">
             <h2>💡 Tips for Best Experience</h2>
             <ul>
-                <li><strong>Companies:</strong> Add high-quality images and detailed descriptions to attract more customers</li>
-                <li><strong>Companies:</strong> Update your contact information regularly</li>
-                <li><strong>Visitors:</strong> Be specific in your inquiry messages to get better responses</li>
-                <li><strong>All Users:</strong> Use the search and filter features to quickly find what you need</li>
-                <li><strong>Companies:</strong> Respond promptly to customer inquiries for better engagement</li>
+                <li><strong>Companies:</strong> Add high-quality, clear images to attract more customers to your listings</li>
+                <li><strong>Companies:</strong> Provide detailed, accurate descriptions of your services or products</li>
+                <li><strong>Companies:</strong> Keep your contact information (phone, address) updated regularly</li>
+                <li><strong>Companies:</strong> Use the search and filter in your dashboard to quickly manage multiple businesses</li>
+                <li><strong>Companies:</strong> Check "View Inquiries" regularly and respond promptly for better customer engagement</li>
+                <li><strong>Visitors:</strong> Be specific and clear in your inquiry messages to get better, more helpful responses</li>
+                <li><strong>Visitors:</strong> Include your contact information (email, phone) so businesses can reach you easily</li>
+                <li><strong>Visitors:</strong> Use the search bar and category filter together to find exactly what you need</li>
+                <li><strong>Admins:</strong> Regularly review "Manage Users" to monitor company accounts</li>
+                <li><strong>Admins:</strong> Use "View Admin" to keep track of all administrator accounts</li>
+                <li><strong>Admins:</strong> Monitor inquiries periodically to remove spam or inappropriate content</li>
+                <li><strong>Admins:</strong> When adding new admins, use strong passwords for security</li>
+                <li><strong>All Users:</strong> Navigate using the role-specific menu for quick access to features</li>
+                <li><strong>All Users:</strong> The platform shows different options based on your role (visitor/company/admin)</li>
             </ul>
         </div>
 
