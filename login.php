@@ -53,9 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="navbar-header">
             <div class="navbar-brand">Business Portal</div>
             <div class="navbar-menu">
-                <a href="visitor.php">🏠 Home</a>
+                <a href="index.php">🏠 Home</a>
                 <a href="login.php?role=company">🏢 Company Login</a>
-                <a href="register.php">📝 Register</a>
                 <a href="login.php?role=admin">👑 Admin Login</a>
                 <a href="about.php">ℹ️ About</a>
             </div>

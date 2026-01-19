@@ -65,9 +65,8 @@ $result = mysqli_query($conn, $sql);
             <div class="navbar-brand">Business Portal</div>
             <div class="navbar-menu">
                 <?php if (!$isLoggedIn) { ?>
-                    <a href="visitor.php">🏠 Home</a>
+                    <a href="index.php">🏠 Home</a>
                     <a href="login.php?role=company">🏢 Company Login</a>
-                    <a href="register.php">📝 Register</a>
                     <a href="login.php?role=admin">👑 Admin Login</a>
                     <a href="about.php">ℹ️ About</a>
                 <?php } elseif ($userRole === 'company') { ?>
@@ -127,7 +126,7 @@ $result = mysqli_query($conn, $sql);
 
         <button type="submit">🔍 Search</button>
 
-        <a href="visitor.php">
+        <a href="index.php">
             <button type="button">🔄 Reset</button>
         </a>
 

@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit" class="btn-inquiry">📤 Send Inquiry</button>
 
         <!-- BACK BUTTON -->
-        <a href="visitor.php" style="text-decoration: none; display: block; margin-top: 16px;">
+        <a href="index.php" style="text-decoration: none; display: block; margin-top: 16px;">
             <button type="button" class="btn-back">
                 ← Back to Listings
             </button>

@@ -4,7 +4,7 @@ include "db.php";
 
 /* BLOCK NORMAL USER */
 if ($_SESSION['role'] === 'normal') {
-    header("Location: visitor.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -80,6 +80,12 @@ $result = mysqli_query($conn, $sql);
 
 <!-- CONTENT -->
 <div class="content">
+    <?php if (isset($_GET['msg']) && $_GET['msg'] == 'deleted'): ?>
+        <div style="background: #d1fae5; padding: 15px; border-radius: 10px; margin-bottom: 20px; color: #059669; font-weight: 600; text-align: center; border: 2px solid #10b981;">
+            ✓ Business deleted successfully!
+        </div>
+    <?php endif; ?>
+    
     <!-- SEARCH + CATEGORY FILTER -->
     <form method="GET" class="search-form">
         <input

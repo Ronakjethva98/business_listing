@@ -168,31 +168,33 @@ $userRole = $_SESSION['role'] ?? 'normal';
     <div class="navbar-container">
         <div class="navbar-header">
             <div class="navbar-brand">Business Portal</div>
-            <?php if ($isLoggedIn) { ?>
-                <div class="navbar-user">👤 <?php echo ucfirst($userRole); ?></div>
-            <?php } ?>
-        </div>
-        <div class="navbar-menu">
-            <?php if (!$isLoggedIn) { ?>
-                <a href="visitor.php">🏠 Home</a>
-                <a href="login.php?role=company">🏢 Company Login</a>
-                <a href="register.php">📝 Register</a>
-                <a href="login.php?role=admin">👑 Admin Login</a>
-                <a href="about.php">ℹ️ About</a>
-            <?php } elseif ($userRole === 'company') { ?>
-                <a href="dashboard.php">🏠 Home</a>
-                <a href="add_business.php">➕ Add Business</a>
-                <a href="view_inquiries.php">📨 View Inquiries</a>
-                <a href="about.php">ℹ️ About</a>
-                <a href="logout.php" class="logout-btn">🚪 Logout</a>
-            <?php } elseif ($userRole === 'admin') { ?>
-                <a href="dashboard.php">🏠 Home</a>
-                <a href="manage_users.php">👥 Manage Users</a>
-                <a href="view_admin.php">👤 View Admin</a>
-                <a href="add_admin.php">➕ Add Admin</a>
-                <a href="about.php">ℹ️ About</a>
-                <a href="logout.php" class="logout-btn">🚪 Logout</a>
-            <?php } ?>
+            <div class="navbar-menu">
+                <?php if (!$isLoggedIn) { ?>
+                    <a href="index.php">🏠 Home</a>
+                    <a href="login.php?role=company">🏢 Company Login</a>
+                    <a href="login.php?role=admin">👑 Admin Login</a>
+                    <a href="about.php">ℹ️ About</a>
+                <?php } elseif ($userRole === 'company') { ?>
+                    <?php if ($isLoggedIn) { ?>
+                        <div class="navbar-user">👤 <?php echo ucfirst($userRole); ?></div>
+                    <?php } ?>
+                    <a href="dashboard.php">🏠 Home</a>
+                    <a href="add_business.php">➕ Add Business</a>
+                    <a href="view_inquiries.php">📨 View Inquiries</a>
+                    <a href="about.php">ℹ️ About</a>
+                    <a href="logout.php" class="logout-btn">🚪 Logout</a>
+                <?php } elseif ($userRole === 'admin') { ?>
+                    <?php if ($isLoggedIn) { ?>
+                        <div class="navbar-user">👤 <?php echo ucfirst($userRole); ?></div>
+                    <?php } ?>
+                    <a href="dashboard.php">🏠 Home</a>
+                    <a href="manage_users.php">👥 Manage Users</a>
+                    <a href="view_admin.php">👤 View Admin</a>
+                    <a href="add_admin.php">➕ Add Admin</a>
+                    <a href="about.php">ℹ️ About</a>
+                    <a href="logout.php" class="logout-btn">🚪 Logout</a>
+                <?php } ?>
+            </div>
         </div>
     </div>
 </nav>
