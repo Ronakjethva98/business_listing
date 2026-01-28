@@ -23,21 +23,25 @@ $b  = mysqli_fetch_assoc($q);
         <div class="navbar-header">
             <div class="navbar-brand">Business Portal</div>
             <div class="navbar-menu">
-                <div class="navbar-user">👤 <?php echo ucfirst($_SESSION['role']); ?></div>
-                <a href="dashboard.php">🏠 Home</a>
+                <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
+                <a href="dashboard.php">Home</a>
                 
                 <?php if ($_SESSION['role'] === 'company') { ?>
-                    <a href="add_business.php">➕ Add Business</a>
-                    <a href="view_inquiries.php">📨 View Inquiries</a>
-                    <a href="about.php">ℹ️ About</a>
+                    <a href="add_business.php">Add Business</a>
+                    <a href="my_advertisements.php">My Ads</a>
+                    <a href="submit_advertisement.php">Submit Ad</a>
+                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="about.php">About</a>
                 <?php } elseif ($_SESSION['role'] === 'admin') { ?>
-                    <a href="manage_users.php">👥 Manage Users</a>
-                    <a href="view_admin.php">👤 View Admin</a>
-                    <a href="add_admin.php">➕ Add Admin</a>
-                    <a href="about.php">ℹ️ About</a>
+                    <a href="manage_users.php">Manage Users</a>
+                    <a href="manage_advertisements.php">Manage Ads</a>
+                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="view_admin.php">View Admin</a>
+                    <a href="add_admin.php">Add Admin</a>
+                    <a href="about.php">About</a>
                 <?php } ?>
                 
-                <a href="logout.php" class="logout-btn">🚪 Logout</a>
+                <a href="logout.php" class="logout-btn">Logout</a>
             </div>
         </div>
     </div>
@@ -46,7 +50,7 @@ $b  = mysqli_fetch_assoc($q);
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        ✏️ Edit Business
+        Edit Business
     </div>
 </div>
 
@@ -116,7 +120,7 @@ $b  = mysqli_fetch_assoc($q);
             style="display: block; width: 100%; padding: 12px; margin-bottom: 16px; border: 2px solid #e2e8f0; border-radius: 10px; background: #fff; font-size: 14px; cursor: pointer;"
         >
 
-        <button type="submit">✅ Update Business</button>
+        <button type="submit">Update Business</button>
     </form>
 
 </div>

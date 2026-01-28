@@ -46,21 +46,23 @@ $result = mysqli_query($conn,
         <div class="navbar-header">
             <div class="navbar-brand">Business Portal</div>
             <div class="navbar-menu">
-                <div class="navbar-user">👤 <?php echo ucfirst($_SESSION['role']); ?></div>
-                <a href="dashboard.php">🏠 Home</a>
+                <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
+               <a href="dashboard.php">Home</a>
                 
                 <?php if ($_SESSION['role'] === 'company') { ?>
-                    <a href="add_business.php">➕ Add Business</a>
-                    <a href="view_inquiries.php">📨 View Inquiries</a>
-                    <a href="about.php">ℹ️ About</a>
+                    <a href="add_business.php">Add Business</a>
+                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="about.php">About</a>
                 <?php } elseif ($_SESSION['role'] === 'admin') { ?>
-                    <a href="manage_users.php">👥 Manage Users</a>
-                    <a href="view_admin.php">👤 View Admin</a>
-                    <a href="add_admin.php">➕ Add Admin</a>
-                    <a href="about.php">ℹ️ About</a>
+                   <a href="manage_users.php">Manage Users</a>
+                    <a href="manage_advertisements.php">Manage Ads</a>
+                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="view_admin.php">View Admin</a>
+                    <a href="add_admin.php">Add Admin</a>
+                    <a href="about.php">About</a>
                 <?php } ?>
                 
-                <a href="logout.php" class="logout-btn">🚪 Logout</a>
+                <a href="logout.php" class="logout-btn">Logout</a>
             </div>
         </div>
     </div>
@@ -69,12 +71,15 @@ $result = mysqli_query($conn,
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        👥 Manage Company Accounts
+        Manage Company Accounts
     </div>
 </div>
 
 <!-- CONTENT -->
 <div class="content">
+
+    <!-- ADVERTISEMENTS -->
+    <?php include "display_ads.php"; ?>
 
     <div class="users-table-container">
         <div class="users-table-header">
@@ -86,9 +91,9 @@ $result = mysqli_query($conn,
             <table class="modern-table">
                 <thead>
                     <tr>
-                        <th>👤 Username</th>
-                        <th>🏷️ Role</th>
-                        <th>⚙️ Action</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,7 +107,7 @@ $result = mysqli_query($conn,
                                 <a href="manage_users.php?delete=<?php echo $u['id']; ?>"
                                    class="delete-btn"
                                    onclick="return confirm('Are you sure you want to delete this company user?')">
-                                    🗑️ Delete
+                                    Delete
                                 </a>
                             </td>
                         </tr>
@@ -111,7 +116,7 @@ $result = mysqli_query($conn,
             </table>
         <?php } else { ?>
             <div class="empty-state">
-                <div class="empty-state-icon">👥</div>
+                <div class="empty-state-icon"></div>
                 <p>No company users found.</p>
             </div>
         <?php } ?>

@@ -170,29 +170,33 @@ $userRole = $_SESSION['role'] ?? 'normal';
             <div class="navbar-brand">Business Portal</div>
             <div class="navbar-menu">
                 <?php if (!$isLoggedIn) { ?>
-                    <a href="index.php">🏠 Home</a>
-                    <a href="login.php?role=company">🏢 Company Login</a>
-                    <a href="login.php?role=admin">👑 Admin Login</a>
-                    <a href="about.php">ℹ️ About</a>
+                    <a href="index.php">Home</a>
+                    <a href="login.php?role=company">Company Login</a>
+                    <a href="login.php?role=admin">Admin Login</a>
+                    <a href="about.php">About</a>
                 <?php } elseif ($userRole === 'company') { ?>
                     <?php if ($isLoggedIn) { ?>
-                        <div class="navbar-user">👤 <?php echo ucfirst($userRole); ?></div>
+                        <div class="navbar-user"><?php echo ucfirst($userRole); ?></div>
                     <?php } ?>
-                    <a href="dashboard.php">🏠 Home</a>
-                    <a href="add_business.php">➕ Add Business</a>
-                    <a href="view_inquiries.php">📨 View Inquiries</a>
-                    <a href="about.php">ℹ️ About</a>
-                    <a href="logout.php" class="logout-btn">🚪 Logout</a>
+                    <a href="dashboard.php">Home</a>
+                    <a href="add_business.php">Add Business</a>
+                    <a href="my_advertisements.php">My Ads</a>
+                    <a href="submit_advertisement.php">Submit Ad</a>
+                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="about.php">About</a>
+                    <a href="logout.php" class="logout-btn">Logout</a>
                 <?php } elseif ($userRole === 'admin') { ?>
                     <?php if ($isLoggedIn) { ?>
-                        <div class="navbar-user">👤 <?php echo ucfirst($userRole); ?></div>
+                        <div class="navbar-user"><?php echo ucfirst($userRole); ?></div>
                     <?php } ?>
-                    <a href="dashboard.php">🏠 Home</a>
-                    <a href="manage_users.php">👥 Manage Users</a>
-                    <a href="view_admin.php">👤 View Admin</a>
-                    <a href="add_admin.php">➕ Add Admin</a>
-                    <a href="about.php">ℹ️ About</a>
-                    <a href="logout.php" class="logout-btn">🚪 Logout</a>
+                    <a href="dashboard.php">Home</a>
+                    <a href="manage_users.php">Manage Users</a>
+                    <a href="manage_advertisements.php">Manage Ads</a>
+                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="view_admin.php">View Admin</a>
+                    <a href="add_admin.php">Add Admin</a>
+                    <a href="about.php">About</a>
+                    <a href="logout.php" class="logout-btn">Logout</a>
                 <?php } ?>
             </div>
         </div>
@@ -208,6 +212,10 @@ $userRole = $_SESSION['role'] ?? 'normal';
 
 <!-- CONTENT -->
 <div class="content">
+    
+    <!-- ADVERTISEMENTS -->
+    <?php include "display_ads.php"; ?>
+    
     <div class="about-container">
         
         <!-- Welcome Section -->
@@ -250,6 +258,11 @@ $userRole = $_SESSION['role'] ?? 'normal';
                     <p>Add, view, edit, and manage multiple admin accounts</p>
                 </div>
                 <div class="feature-item">
+                    <div class="feature-icon">📢</div>
+                    <h5>Advertisement System</h5>
+                    <p>Companies can submit ads; admins approve them for website-wide display</p>
+                </div>
+                <div class="feature-item">
                     <div class="feature-icon">🔐</div>
                     <h5>Role-Based Access</h5>
                     <p>Secure authentication with distinct permissions for visitors, companies, and admins</p>
@@ -285,6 +298,8 @@ $userRole = $_SESSION['role'] ?? 'normal';
                     <li>Delete your business listings if needed</li>
                     <li>Search and filter your own businesses by name or category</li>
                     <li>Manage multiple businesses under one account</li>
+                    <li><strong>Submit advertisements</strong> for admin approval</li>
+                    <li><strong>View your advertisement status</strong> (pending, approved, rejected)</li>
                     <li><strong>View all customer inquiries</strong> sent to your businesses</li>
                     <li>Navigate easily with role-specific navigation menu</li>
                 </ul>
@@ -305,6 +320,8 @@ $userRole = $_SESSION['role'] ?? 'normal';
                     <li><strong>View all customer inquiries</strong> from all businesses across the platform</li>
                     <li>Delete inappropriate content, spam, or unwanted inquiries</li>
                     <li>Edit and delete any business listing</li>
+                    <li><strong>Manage Advertisements</strong> - Review, approve, or reject company ad submissions</li>
+                    <li>View all advertisements with filtering by status (pending/approved/rejected)</li>
                     <li>Full administrative control over the entire platform</li>
                     <li>Role-specific admin navigation and dashboard</li>
                 </ul>
@@ -339,6 +356,9 @@ $userRole = $_SESSION['role'] ?? 'normal';
                 <li>Click <strong>"Delete"</strong> to remove a listing (you'll see a confirmation page)</li>
                 <li>Click <strong>"View Inquiries"</strong> in the navigation to see all customer inquiries for your businesses</li>
                 <li>Review inquiry details including customer name, email, phone, message, and submission date</li>
+                <li>Click <strong>"Submit Ad"</strong> to create a new advertisement submission</li>
+                <li>Fill in advertisement details (title, description) and upload an image</li>
+                <li>Click <strong>"My Ads"</strong> to view the status of your advertisements (pending, approved, rejected)</li>
             </ol>
 
             <h3>For Administrators</h3>
@@ -359,6 +379,10 @@ $userRole = $_SESSION['role'] ?? 'normal';
                 <li>Click <strong>"Delete"</strong> to remove inappropriate or spam business listings</li>
                 <li>Use <strong>"View Inquiries"</strong> to see all customer inquiries from all businesses</li>
                 <li>Delete inappropriate inquiries or spam messages as needed</li>
+                <li>Click <strong>"Manage Ads"</strong> to review company advertisement submissions</li>
+                <li>Use tabs to view <strong>Pending</strong>, <strong>Approved</strong>, or <strong>Rejected</strong> advertisements</li>
+                <li>Click <strong>"Approve"</strong> to publish advertisements across the website</li>
+                <li>Click <strong>"Reject"</strong> and add notes explaining why an ad was rejected</li>
                 <li>Monitor and maintain the overall quality and security of the platform</li>
             </ol>
         </div>
@@ -372,6 +396,8 @@ $userRole = $_SESSION['role'] ?? 'normal';
                 <li><strong>Companies:</strong> Keep your contact information (phone, address) updated regularly</li>
                 <li><strong>Companies:</strong> Use the search and filter in your dashboard to quickly manage multiple businesses</li>
                 <li><strong>Companies:</strong> Check "View Inquiries" regularly and respond promptly for better customer engagement</li>
+                <li><strong>Companies:</strong> Submit high-quality advertisement images (800x400px recommended)</li>
+                <li><strong>Companies:</strong> If your ad is rejected, review admin notes and resubmit with corrections</li>
                 <li><strong>Visitors:</strong> Be specific and clear in your inquiry messages to get better, more helpful responses</li>
                 <li><strong>Visitors:</strong> Include your contact information (email, phone) so businesses can reach you easily</li>
                 <li><strong>Visitors:</strong> Use the search bar and category filter together to find exactly what you need</li>
@@ -379,6 +405,8 @@ $userRole = $_SESSION['role'] ?? 'normal';
                 <li><strong>Admins:</strong> Use "View Admin" to keep track of all administrator accounts</li>
                 <li><strong>Admins:</strong> Monitor inquiries periodically to remove spam or inappropriate content</li>
                 <li><strong>Admins:</strong> When adding new admins, use strong passwords for security</li>
+                <li><strong>Admins:</strong> Review advertisement submissions promptly to ensure timely approval</li>
+                <li><strong>Admins:</strong> Provide clear rejection notes so companies can improve their ads</li>
                 <li><strong>All Users:</strong> Navigate using the role-specific menu for quick access to features</li>
                 <li><strong>All Users:</strong> The platform shows different options based on your role (visitor/company/admin)</li>
             </ul>

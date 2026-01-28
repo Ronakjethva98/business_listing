@@ -77,7 +77,7 @@ if (count($businesses) > 0) {
     <div class="navbar-container">
         <div class="navbar-header">
             <div class="navbar-brand">Business Portal</div>
-            <div class="navbar-user">👤 <?php echo ucfirst($_SESSION['role']); ?></div>
+            <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
         </div>
         <div class="navbar-menu">
             <a href="dashboard.php">🏠 Home</a>
@@ -88,6 +88,7 @@ if (count($businesses) > 0) {
                 <a href="about.php">ℹ️ About</a>
             <?php } elseif ($_SESSION['role'] === 'admin') { ?>
                 <a href="manage_users.php">👥 Manage Users</a>
+                <a href="view_inquiries.php">📨 View Inquiries</a>
                 <a href="view_admin.php">👤 View Admin</a>
                 <a href="add_admin.php">➕ Add Admin</a>
                 <a href="about.php">ℹ️ About</a>

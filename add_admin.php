@@ -63,21 +63,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="navbar-header">
             <div class="navbar-brand">Business Portal</div>
             <div class="navbar-menu">
-                <div class="navbar-user">👤 <?php echo ucfirst($_SESSION['role']); ?></div>
-                <a href="dashboard.php">🏠 Home</a>
+                <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
+                <a href="dashboard.php">Home</a>
                 
                 <?php if ($_SESSION['role'] === 'company') { ?>
-                    <a href="add_business.php">➕ Add Business</a>
-                    <a href="view_inquiries.php">📨 View Inquiries</a>
-                    <a href="about.php">ℹ️ About</a>
+                    <a href="add_business.php">Add Business</a>
+                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="about.php">About</a>
                 <?php } elseif ($_SESSION['role'] === 'admin') { ?>
-                    <a href="manage_users.php">👥 Manage Users</a>
-                    <a href="view_admin.php">👤 View Admin</a>
-                    <a href="add_admin.php">➕ Add Admin</a>
-                    <a href="about.php">ℹ️ About</a>
+                    <a href="manage_users.php">Manage Users</a>
+                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="view_admin.php">View Admin</a>
+                    <a href="add_admin.php">Add Admin</a>
+                    <a href="about.php">About</a>
                 <?php } ?>
                 
-                <a href="logout.php" class="logout-btn">🚪 Logout</a>
+                <a href="logout.php" class="logout-btn">Logout</a>
             </div>
         </div>
     </div>
@@ -86,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        ➕ Add New Administrator
+        Add New Administrator
     </div>
 </div>
 
@@ -130,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             required
         >
 
-        <button type="submit">➕ Create Administrator</button>
+        <button type="submit">Create Administrator</button>
         
         <a href="view_admin.php" style="text-decoration: none; display: block; margin-top: 16px;">
             <button type="button" style="width: 100%; background: linear-gradient(135deg, #64748b 0%, #475569 100%);">

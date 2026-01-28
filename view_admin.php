@@ -50,7 +50,7 @@ $result = mysqli_query($conn,
             overflow-x: auto;
             margin-bottom: 30px;
         }
-
+        
         .admins-table-header {
             display: flex;
             justify-content: space-between;
@@ -59,7 +59,7 @@ $result = mysqli_query($conn,
             padding-bottom: 24px;
             border-bottom: 2px solid #e2e8f0;
         }
-
+        
         .admins-table-header h2 {
             font-family: 'Poppins', sans-serif;
             font-size: 26px;
@@ -67,7 +67,7 @@ $result = mysqli_query($conn,
             color: #1e293b;
             margin: 0;
         }
-
+        
         .admins-count {
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             color: white;
@@ -76,18 +76,18 @@ $result = mysqli_query($conn,
             font-size: 14px;
             font-weight: 600;
         }
-
+        
         .modern-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
             font-size: 15px;
         }
-
+        
         .modern-table thead tr {
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         }
-
+        
         .modern-table th {
             padding: 16px;
             text-align: left;
@@ -96,45 +96,45 @@ $result = mysqli_query($conn,
             font-family: 'Poppins', sans-serif;
             border-bottom: 2px solid #cbd5e1;
         }
-
+        
         .modern-table th:first-child {
             border-top-left-radius: 10px;
             padding-left: 20px;
         }
-
+        
         .modern-table th:last-child {
             border-top-right-radius: 10px;
             padding-right: 20px;
         }
-
+        
         .modern-table tbody tr {
             transition: all 0.3s ease;
             border-bottom: 1px solid #e2e8f0;
         }
-
+        
         .modern-table tbody tr:hover {
             background: #f8fafc;
         }
-
+        
         .modern-table td {
             padding: 16px;
             color: #475569;
             vertical-align: middle;
         }
-
+        
         .modern-table td:first-child {
             padding-left: 20px;
         }
-
+        
         .modern-table td:last-child {
             padding-right: 20px;
         }
-
+        
         .username-cell {
             font-weight: 600;
             color: #1e293b;
         }
-
+        
         .role-badge {
             display: inline-block;
             padding: 6px 14px;
@@ -144,7 +144,7 @@ $result = mysqli_query($conn,
             font-size: 13px;
             font-weight: 600;
         }
-
+        
         .current-user-badge {
             display: inline-block;
             padding: 4px 10px;
@@ -155,7 +155,7 @@ $result = mysqli_query($conn,
             font-weight: 600;
             margin-left: 8px;
         }
-
+        
         .action-edit {
             display: inline-flex;
             align-items: center;
@@ -172,12 +172,12 @@ $result = mysqli_query($conn,
             white-space: nowrap;
             margin-right: 8px;
         }
-
+        
         .action-edit:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
         }
-
+        
         .action-delete {
             display: inline-flex;
             align-items: center;
@@ -193,25 +193,25 @@ $result = mysqli_query($conn,
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
             white-space: nowrap;
         }
-
+        
         .action-delete:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 18px rgba(239, 68, 68, 0.4);
         }
-
+        
         .action-delete.disabled {
             opacity: 0.5;
             cursor: not-allowed;
             pointer-events: none;
         }
-
+        
         .empty-state {
             text-align: center;
             padding: 80px 20px;
             color: #64748b;
             font-size: 16px;
         }
-
+        
         .empty-state-icon {
             font-size: 56px;
             margin-bottom: 20px;
@@ -226,21 +226,22 @@ $result = mysqli_query($conn,
         <div class="navbar-header">
             <div class="navbar-brand">Business Portal</div>
             <div class="navbar-menu">
-                <div class="navbar-user">👤 <?php echo ucfirst($_SESSION['role']); ?></div>
-                <a href="dashboard.php">🏠 Home</a>
+                <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
+                <a href="dashboard.php">Home</a>
                 
                 <?php if ($_SESSION['role'] === 'company') { ?>
-                    <a href="add_business.php">➕ Add Business</a>
-                    <a href="view_inquiries.php">📨 View Inquiries</a>
-                    <a href="about.php">ℹ️ About</a>
+                    <a href="add_business.php">Add Business</a>
+                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="about.php">About</a>
                 <?php } elseif ($_SESSION['role'] === 'admin') { ?>
-                    <a href="manage_users.php">👥 Manage Users</a>
-                    <a href="view_admin.php">👤 View Admin</a>
-                    <a href="add_admin.php">➕ Add Admin</a>
-                    <a href="about.php">ℹ️ About</a>
+                    <a href="manage_users.php">Manage Users</a>
+                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="view_admin.php">View Admin</a>
+                    <a href="add_admin.php">Add Admin</a>
+                    <a href="about.php">About</a>
                 <?php } ?>
                 
-                <a href="logout.php" class="logout-btn">🚪 Logout</a>
+                <a href="logout.php" class="logout-btn">Logout</a>
             </div>
         </div>
     </div>
@@ -249,12 +250,15 @@ $result = mysqli_query($conn,
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        👤 View Admin - Manage Administrators
+        View Admin - Manage Administrators
     </div>
 </div>
 
 <!-- CONTENT -->
 <div class="content">
+
+    <!-- ADVERTISEMENTS -->
+    <?php include "display_ads.php"; ?>
 
     <div class="admins-table-container">
         <div class="admins-table-header">
@@ -266,9 +270,9 @@ $result = mysqli_query($conn,
             <table class="modern-table">
                 <thead>
                     <tr>
-                        <th>👤 Username</th>
-                        <th>🏷️ Role</th>
-                        <th>⚙️ Actions</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -285,18 +289,18 @@ $result = mysqli_query($conn,
                             </td>
                             <td>
                                 <a href="edit_admin.php?id=<?php echo $u['id']; ?>" class="action-edit">
-                                    ✏️ Edit
+                                    Edit
                                 </a>
                                 
                                 <?php if ($u['id'] != $_SESSION['user_id']) { ?>
-                                    <a href="view_admin.php?delete=<?php echo $u['id']; ?>"
+                                    <a href="view_admin.php?delete=<?php echo $u['id']; ?>" 
                                        class="action-delete"
                                        onclick="return confirm('Are you sure you want to delete this administrator?')">
-                                        🗑️ Delete
+                                        Delete
                                     </a>
                                 <?php } else { ?>
                                     <a class="action-delete disabled" title="You cannot delete yourself">
-                                        🗑️ Delete
+                                        Delete
                                     </a>
                                 <?php } ?>
                             </td>
@@ -306,7 +310,7 @@ $result = mysqli_query($conn,
             </table>
         <?php } else { ?>
             <div class="empty-state">
-                <div class="empty-state-icon">👥</div>
+                <div class="empty-state-icon"></div>
                 <p>No administrators found.</p>
             </div>
         <?php } ?>
