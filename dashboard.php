@@ -8,8 +8,8 @@ if ($_SESSION['role'] === 'normal') {
     exit();
 }
 
-$search   = $_GET['search'] ?? '';
-$category = $_GET['category'] ?? '';
+$search   = mysqli_real_escape_string($conn, $_GET['search'] ?? '');
+$category = mysqli_real_escape_string($conn, $_GET['category'] ?? '');
 
 /* FETCH DISTINCT CATEGORIES */
 $catResult = mysqli_query($conn, "SELECT DISTINCT category FROM businesses");
@@ -78,7 +78,7 @@ $result = mysqli_query($conn, $sql);
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        Welcome, <?php echo ucfirst($_SESSION['role']); ?> 👋
+        Welcome, <?php echo ucfirst($_SESSION['role']); ?>
     </div>
 </div>
 
@@ -104,6 +104,10 @@ $result = mysqli_query($conn, $sql);
         </div>
     <?php endif; ?>
     
+    
+    <!-- ADVERTISEMENTS -->
+    <?php include "display_ads.php"; ?>
+    
     <!-- SEARCH + CATEGORY FILTER -->
     <form method="GET" class="search-form">
         <input
@@ -123,14 +127,11 @@ $result = mysqli_query($conn, $sql);
             <?php } ?>
         </select>
 
-        <button type="submit">🔍 Search</button>
+        <button type="submit">Search</button>
         
         <a href="dashboard.php">
-        <button type="button">🔄 Reset</button></a>
+        <button type="button">Reset</button></a>
     </form>
-
-    <!-- ADVERTISEMENTS -->
-    <?php include "display_ads.php"; ?>
 
     <!-- BUSINESS LIST -->
     <div class="card-grid">
@@ -144,18 +145,27 @@ $result = mysqli_query($conn, $sql);
                     <img src="<?php echo $image_src; ?>" alt="<?php echo htmlspecialchars($b['name']); ?>">
 
                     <div class="card-content">
-                        <h3><?php echo $b['name']; ?></h3>
-                        <p><b>Category:</b> <?php echo $b['category']; ?></p>
-                        <p><?php echo $b['address']; ?></p>
-                        <p><?php echo $b['phone']; ?></p>
+                        <h3><?php echo htmlspecialchars($b['name']); ?></h3>
+                        <p><b>Category:</b> <?php echo htmlspecialchars($b['category']); ?></p>
+                        <?php if (!empty($b['description'])): ?>
+                            <p><b>Description:</b> <?php echo htmlspecialchars($b['description']); ?></p>
+                        <?php endif; ?>
+                        <p><b>Address:</b> <?php echo htmlspecialchars($b['address']); ?></p>
+                        <p><b>Phone:</b> <?php echo htmlspecialchars($b['phone']); ?></p>
+                        <?php if (!empty($b['email'])): ?>
+                            <p><b>Email:</b> <?php echo htmlspecialchars($b['email']); ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($b['website'])): ?>
+                            <p><b>Website:</b> <a href="<?php echo htmlspecialchars($b['website']); ?>" target="_blank" style="color: var(--sky-blue);"><?php echo htmlspecialchars($b['website']); ?></a></p>
+                        <?php endif; ?>
 
                         <div class="action-buttons">
                             <a href="edit_business.php?id=<?php echo $b['id']; ?>" class="action-edit">
-                                ✏️ Edit
+                                Edit
                             </a>
 
                             <a href="delete_business.php?id=<?php echo $b['id']; ?>" class="action-delete">
-                                🗑️ Delete
+                                Delete
                             </a>
                         </div>
                     </div>

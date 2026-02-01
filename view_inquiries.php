@@ -93,6 +93,7 @@ if ($_SESSION['role'] === 'company') {
                     <a href="about.php">About</a>
                 <?php } elseif ($_SESSION['role'] === 'admin') { ?>
                     <a href="manage_users.php">Manage Users</a>
+                    <a href="manage_advertisements.php">Manage Ads</a>
                     <a href="view_inquiries.php">View Inquiries</a>
                     <a href="view_admin.php">View Admin</a>
                     <a href="add_admin.php">Add Admin</a>

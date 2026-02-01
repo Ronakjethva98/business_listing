@@ -99,15 +99,72 @@ if ($_SESSION['role'] !== 'company') {
         <small style="color: #666; display: block; margin-top: 8px; margin-bottom: 16px;">Recommended size: 800x400px for best display</small>
         
         <label>Link URL (Optional)</label>
-        <input type="url" name="link_url" placeholder="https://example.com">
+        <input type="url" name="link_url" id="link_url" placeholder="https://example.com">
         <small style="color: #666; display: block; margin-top: 8px; margin-bottom: 16px;">Where should users go when they click your ad?</small>
         
-        <button type="submit" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <label>Advertisement Start Date *</label>
+        <input type="date" name="start_date" id="start_date" required min="<?php echo date('Y-m-d'); ?>">
+        
+        <label>Advertisement End Date *</label>
+        <input type="date" name="end_date" id="end_date" required>
+        <small style="color: #666; display: block; margin-top: 8px; margin-bottom: 16px;">Select when your advertisement should stop displaying</small>
+        
+        <!-- Cost Calculation Box -->
+        <div id="costBox" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #0ea5e9; display: none;">
+            <h3 style="margin: 0 0 12px 0; color: #0369a1; font-size: 18px;">💰 Payment Information</h3>
+            <div style="background: white; padding: 16px; border-radius: 8px; margin-bottom: 12px;">
+                <p style="margin: 0 0 8px 0; color: #666; font-size: 14px;">Duration: <strong id="durationDays" style="color: #1e293b;">-</strong> days</p>
+                <p style="margin: 0 0 8px 0; color: #666; font-size: 14px;">Rate: <strong style="color: #1e293b;">₹100 per day</strong></p>
+                <p style="margin: 0; font-size: 20px; font-weight: 700; color: #059669;">Total Cost: ₹<span id="totalCost">0</span></p>
+            </div>
+            <div style="background: #fef3c7; padding: 14px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                <p style="margin: 0 0 10px 0; font-weight: 600; color: #92400e; font-size: 15px;">To activate your advertisement:</p>
+                <p style="margin: 0 0 6px 0; color: #78350f;"><strong>📞 Phone:</strong> +91 XXXXX XXXXX</p>
+                <p style="margin: 0 0 10px 0; color: #78350f;"><strong>📧 Email:</strong> admin@businessportal.com</p>
+                <p style="margin: 0; color: #78350f; font-size: 13px;">Payment via Bank Transfer, UPI, or Cash</p>
+            </div>
+        </div>
+        
+        <script>
+        // Calculate cost dynamically
+        const startInput = document.getElementById('start_date');
+        const endInput = document.getElementById('end_date');
+        const costBox = document.getElementById('costBox');
+        const durationSpan = document.getElementById('durationDays');
+        const totalCostSpan = document.getElementById('totalCost');
+        const costPerDay = 100;
+        
+        function calculateCost() {
+            const startDate = new Date(startInput.value);
+            const endDate = new Date(endInput.value);
+            
+            if (startInput.value && endInput.value && endDate >= startDate) {
+                // Calculate days (inclusive of both start and end)
+                const timeDiff = endDate.getTime() - startDate.getTime();
+                const days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+                const total = days * costPerDay;
+                
+                durationSpan.textContent = days;
+                totalCostSpan.textContent = total.toLocaleString('en-IN');
+                costBox.style.display = 'block';
+                
+                // Set minimum end date
+                endInput.min = startInput.value;
+            } else {
+                costBox.style.display = 'none';
+            }
+        }
+        
+        startInput.addEventListener('change', calculateCost);
+        endInput.addEventListener('change', calculateCost);
+        </script>
+        
+        <button type="submit" class="btn-primary-ad" style="width: 100%;">
             📤 Submit Advertisement
         </button>
         
         <a href="my_advertisements.php">
-            <button type="button" style="background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); margin-top: 12px; width: 100%;">
+            <button type="button" class="btn-delete-ad" style="margin-top: 12px; width: 100%; border-radius: 12px;">
                 📢 View My Ads
             </button>
         </a>

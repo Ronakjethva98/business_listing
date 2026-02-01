@@ -7,11 +7,11 @@ $error    = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $business = $_POST['business'];
-    $name     = $_POST['name'];
-    $email    = $_POST['email'];
-    $phone    = $_POST['phone'];
-    $message  = $_POST['message'];
+    $business = mysqli_real_escape_string($conn, $_POST['business']);
+    $name     = mysqli_real_escape_string($conn, $_POST['name']);
+    $email    = mysqli_real_escape_string($conn, $_POST['email']);
+    $phone    = mysqli_real_escape_string($conn, $_POST['phone']);
+    $message  = mysqli_real_escape_string($conn, $_POST['message']);
 
     if ($name && $email && $message) {
 

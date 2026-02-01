@@ -19,12 +19,35 @@ $company_id = $_SESSION['user_id'];
 $title = mysqli_real_escape_string($conn, trim($_POST['title']));
 $description = mysqli_real_escape_string($conn, trim($_POST['description']));
 $link_url = mysqli_real_escape_string($conn, trim($_POST['link_url']));
+$start_date = mysqli_real_escape_string($conn, $_POST['start_date']);
+$end_date = mysqli_real_escape_string($conn, $_POST['end_date']);
 
 /* VALIDATE REQUIRED FIELDS */
-if (empty($title)) {
+if (empty($title) || empty($start_date) || empty($end_date)) {
     header("Location: submit_advertisement.php?error=missing_fields");
     exit();
 }
+
+/* VALIDATE DATES */
+$start = new DateTime($start_date);
+$end = new DateTime($end_date);
+$today = new DateTime();
+$today->setTime(0,0,0);
+
+if ($start < $today) {
+    header("Location: submit_advertisement.php?error=invalid_start_date");
+    exit();
+}
+
+if ($end < $start) {
+    header("Location: submit_advertisement.php?error=invalid_end_date");
+    exit();
+}
+
+/* CALCULATE COST */
+$days_duration = $start->diff($end)->days + 1; // +1 to include both days
+$cost_per_day = 100.00;
+$total_cost = $days_duration * $cost_per_day;
 
 /* HANDLE FILE UPLOAD */
 if (!isset($_FILES['ad_image']) || $_FILES['ad_image']['error'] !== UPLOAD_ERR_OK) {
@@ -62,8 +85,8 @@ if (!move_uploaded_file($file_tmp, $upload_path)) {
 }
 
 /* INSERT INTO DATABASE */
-$sql = "INSERT INTO advertisements (company_id, title, description, image_path, link_url, status) 
-        VALUES ('$company_id', '$title', '$description', '$upload_path', '$link_url', 'pending')";
+$sql = "INSERT INTO advertisements (company_id, title, description, image_path, link_url, start_date, end_date, days_duration, cost_per_day, total_cost, is_paid, status) 
+        VALUES ('$company_id', '$title', '$description', '$upload_path', '$link_url', '$start_date', '$end_date', '$days_duration', '$cost_per_day', '$total_cost', 0, 'pending')";
 
 if (mysqli_query($conn, $sql)) {
     header("Location: submit_advertisement.php?success=1");

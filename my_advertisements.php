@@ -86,6 +86,7 @@ mysqli_data_seek($result, 0); // Reset pointer again
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            table-layout: fixed;
         }
         .ad-table th {
             background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
@@ -94,9 +95,18 @@ mysqli_data_seek($result, 0); // Reset pointer again
             text-align: left;
             font-weight: 600;
         }
+        .ad-table th:nth-child(1) { width: 120px; } /* Image */
+        .ad-table th:nth-child(2) { width: 25%; } /* Title */
+        .ad-table th:nth-child(3) { width: 120px; } /* Status */
+        .ad-table th:nth-child(4) { width: 130px; } /* Submitted */
+        .ad-table th:nth-child(5) { width: auto; } /* Details */
+        .ad-table th:nth-child(6) { width: 100px; } /* Actions */
         .ad-table td {
             padding: 16px;
             border-bottom: 1px solid #e5e7eb;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            vertical-align: top;
         }
         .ad-table tr:hover {
             background: #f9fafb;
@@ -181,9 +191,10 @@ mysqli_data_seek($result, 0); // Reset pointer again
 
     <!-- SUBMIT NEW AD BUTTON -->
     <div style="margin-bottom: 24px;">
-        <a href="submit_advertisement.php">
-            <button style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 12px 24px;">
-                ➕ Submit New Advertisement
+        <a href="submit_advertisement.php" class="btn-submit-ad-container">
+            <button type="button" class="btn-primary-ad">
+                <span class="icon">➕</span>
+                <span class="text">Submit New Advertisement</span>
             </button>
         </a>
     </div>
@@ -191,6 +202,7 @@ mysqli_data_seek($result, 0); // Reset pointer again
     <!-- ADVERTISEMENTS TABLE -->
     <div class="box">
         <?php if ($total_ads > 0): ?>
+            <div style="overflow-x: auto;">
             <table class="ad-table">
                 <thead>
                     <tr>
@@ -199,6 +211,7 @@ mysqli_data_seek($result, 0); // Reset pointer again
                         <th>Status</th>
                         <th>Submitted</th>
                         <th>Details</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -230,7 +243,7 @@ mysqli_data_seek($result, 0); // Reset pointer again
                             </td>
                             <td>
                                 <?php if ($ad['link_url']): ?>
-                                    <a href="<?php echo htmlspecialchars($ad['link_url']); ?>" target="_blank" style="color: #3b82f6; text-decoration: none;">
+                                    <a href="<?php echo htmlspecialchars($ad['link_url']); ?>" target="_blank" style="color: #3b82f6; text-decoration: none; word-break: break-all; display: inline-block; max-width: 100%;">
                                         🔗 View Link
                                     </a>
                                     <br>
@@ -247,10 +260,18 @@ mysqli_data_seek($result, 0); // Reset pointer again
                                     </small>
                                 <?php endif; ?>
                             </td>
+                            <td>
+                                <a href="edit_advertisement.php?id=<?php echo $ad['id']; ?>" style="text-decoration: none;">
+                                    <button type="button" class="btn-edit" style="padding: 8px 16px; font-size: 14px;">
+                                        ✏️ Edit
+                                    </button>
+                                </a>
+                            </td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
             </table>
+            </div>
         <?php else: ?>
             <p style="text-align: center; color: #666; padding: 40px 20px;">
                 No advertisements submitted yet.

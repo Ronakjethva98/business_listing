@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (strlen($password) < 6) {
         $error = "Password must be at least 6 characters!";
     } else {
-        // Check if username already exists
+        // Check if username already exists (case-sensitive)
         $check = mysqli_query($conn, "SELECT id FROM users WHERE username='$username'");
         
         if (mysqli_num_rows($check) > 0) {
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Admin - Business Listing Portal</title>
     <meta name="description" content="Create a new administrator account">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
 </head>
 <body>
 
@@ -68,10 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 <?php if ($_SESSION['role'] === 'company') { ?>
                     <a href="add_business.php">Add Business</a>
+                    <a href="my_advertisements.php">My Ads</a>
+                    <a href="submit_advertisement.php">Submit Ad</a>
                     <a href="view_inquiries.php">View Inquiries</a>
                     <a href="about.php">About</a>
                 <?php } elseif ($_SESSION['role'] === 'admin') { ?>
                     <a href="manage_users.php">Manage Users</a>
+                    <a href="manage_advertisements.php">Manage Ads</a>
                     <a href="view_inquiries.php">View Inquiries</a>
                     <a href="view_admin.php">View Admin</a>
                     <a href="add_admin.php">Add Admin</a>
@@ -98,13 +101,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h2>Create Administrator Account</h2>
 
         <?php if ($success != "") { ?>
-            <p style="color: #10b981; text-align: center; margin-bottom: 15px; padding: 12px; background: #d1fae5; border-radius: 10px; font-size: 14px;">
+            <p class="success-message">
                 <?php echo $success; ?>
             </p>
         <?php } ?>
 
         <?php if ($error != "") { ?>
-            <p style="color: #ef4444; text-align: center; margin-bottom: 15px; padding: 12px; background: #fee2e2; border-radius: 10px; font-size: 14px;">
+            <p class="error-message">
                 <?php echo $error; ?>
             </p>
         <?php } ?>
@@ -133,11 +136,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <button type="submit">Create Administrator</button>
         
-        <a href="view_admin.php" style="text-decoration: none; display: block; margin-top: 16px;">
-            <button type="button" style="width: 100%; background: linear-gradient(135deg, #64748b 0%, #475569 100%);">
-                ← Back to Admin Panel
-            </button>
-        </a>
+        <div style="margin-top: 16px;">
+            <a href="view_admin.php" style="text-decoration: none;">
+                <button type="button" class="btn-back">← Back to Admin Panel</button>
+            </a>
+        </div>
     </form>
 
 </div>

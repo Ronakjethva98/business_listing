@@ -13,7 +13,7 @@ $userRole = $_SESSION['role'] ?? 'normal';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - Business Listing Portal</title>
     <meta name="description" content="Learn how to use the Business Listing Portal">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
     <style>
         .about-container {
             max-width: 900px;
@@ -206,7 +206,7 @@ $userRole = $_SESSION['role'] ?? 'normal';
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        ℹ️ About Us - How to Use
+        About Us - How to Use
     </div>
 </div>
 
@@ -248,12 +248,12 @@ $userRole = $_SESSION['role'] ?? 'normal';
                     <p>Create, edit, delete listings with image upload support</p>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">�</div>
+                    <div class="feature-icon">👥</div>
                     <h5>User Management</h5>
                     <p>Admins can view and manage company users</p>
                 </div>
                 <div class="feature-item">
-                    <div class="feature-icon">�</div>
+                    <div class="feature-icon">👑</div>
                     <h5>Admin Management</h5>
                     <p>Add, view, edit, and manage multiple admin accounts</p>
                 </div>

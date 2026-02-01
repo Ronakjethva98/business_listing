@@ -1,6 +1,6 @@
 <?php
 /**
- * Advertisement Display Component
+ * Advertisement Display Component - Rotating Ad System
  * Include this file on pages where you want to show approved advertisements
  * 
  * Usage: include "display_ads.php";
@@ -11,97 +11,394 @@ if (!isset($conn)) {
     include_once "db.php";
 }
 
-// Fetch approved advertisements (random selection for rotation)
-$ad_sql = "SELECT * FROM advertisements WHERE status='approved' ORDER BY RAND() LIMIT 3";
+// Fetch approved and PAID advertisements within active date range
+$ad_sql = "SELECT * FROM advertisements 
+           WHERE status='approved' 
+           AND is_paid=1 
+           AND CURDATE() BETWEEN start_date AND end_date 
+           ORDER BY RAND()";
 $ad_result = mysqli_query($conn, $ad_sql);
+$ads = [];
+while ($ad = mysqli_fetch_assoc($ad_result)) {
+    $ads[] = $ad;
+}
 
-if (mysqli_num_rows($ad_result) > 0):
+if (count($ads) > 0):
 ?>
 <style>
     .advertisement-section {
-        margin: 30px 0;
-        padding: 20px;
-        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-        border-radius: 12px;
-        border: 2px dashed #9ca3af;
+        margin: 48px 0 60px 0;
     }
     .advertisement-label {
         text-align: center;
-        font-size: 12px;
+        font-size: 13px;
         color: #6b7280;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 16px;
-        font-weight: 600;
+        letter-spacing: 1.5px;
+        margin-bottom: 28px;
+        font-weight: 700;
     }
-    .ads-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
+    
+    /* ROTATING AD CONTAINER */
+    .ad-rotator-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        overflow: hidden;
     }
+    
+    /* KEYFRAME ANIMATIONS */
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+    }
+    
     .ad-item {
-        background: white;
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-        cursor: pointer;
+        display: block;
+        position: absolute;
+        width: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(100%);
     }
-    .ad-item:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    
+    .ad-item.active {
+        opacity: 1;
+        visibility: visible;
+        position: relative;
+        animation: slideIn 0.6s ease-out forwards;
+        transform: translateX(0);
     }
+    
+    .ad-item.exiting {
+        animation: slideOut 0.6s ease-in forwards;
+    }
+
+    
+
+    
+    .ad-image-container {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+        background: #000;
+    }
+    
     .ad-item img {
         width: 100%;
-        height: 200px;
+        height: 100%;
         object-fit: cover;
+        display: block;
     }
-    .ad-content {
-        padding: 16px;
+    
+    /* COMPANY LOGO BADGE */
+    .ad-company-badge {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 8px 16px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        backdrop-filter: blur(10px);
     }
-    .ad-title {
-        font-size: 18px;
+    
+    .ad-company-icon {
+        width: 24px;
+        height: 24px;
+        background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+    }
+    
+    .ad-company-name {
+        font-size: 13px;
         font-weight: 700;
         color: #111827;
-        margin: 0 0 8px 0;
     }
-    .ad-description {
-        font-size: 14px;
+    
+    .ad-company-tagline {
+        font-size: 11px;
         color: #6b7280;
-        margin: 0;
-        line-height: 1.5;
+        margin-top: -2px;
     }
+    
+    /* TRY NOW BUTTON */
+    .ad-try-now {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(59, 130, 246, 0.95);
+        color: white;
+        padding: 14px 40px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        text-align: center;
+        min-width: 140px;
+    }
+    
+    .ad-try-now:hover {
+        background: rgba(37, 99, 235, 1);
+        transform: translateX(-50%) translateY(-4px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6);
+    }
+    
+    .ad-content {
+        display: none;
+    }
+    
+    /* NAVIGATION DOTS */
+    .ad-dots {
+        text-align: center;
+        margin-top: 20px;
+        padding: 10px 0;
+    }
+    
+    .ad-dot {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #d1d5db;
+        margin: 0 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .ad-dot.active {
+        background: #3b82f6;
+        transform: scale(1.3);
+    }
+    
+    .ad-dot:hover {
+        background: #6b7280;
+    }
+    
+    /* AD COUNTER */
+    .ad-counter {
+        text-align: center;
+        font-size: 14px;
+        color: #9ca3af;
+        margin-top: 10px;
+        font-weight: 500;
+    }
+    
     @media (max-width: 768px) {
-        .ads-container {
-            grid-template-columns: 1fr;
+        .ad-image-container {
+            height: 200px;
+        }
+        .ad-title {
+            font-size: 20px;
+        }
+        .ad-description {
+            font-size: 14px;
+        }
+        .ad-try-now {
+            padding: 12px 30px;
+            font-size: 14px;
+            bottom: 20px;
+        }
+        .ad-company-badge {
+            top: 15px;
+            left: 15px;
+            padding: 6px 12px;
         }
     }
 </style>
 
 <div class="advertisement-section">
-    <div class="advertisement-label">📢 Sponsored Advertisements</div>
-    <div class="ads-container">
-        <?php while ($ad = mysqli_fetch_assoc($ad_result)): ?>
-            <a href="<?php echo !empty($ad['link_url']) ? htmlspecialchars($ad['link_url']) : '#'; ?>" 
-               target="<?php echo !empty($ad['link_url']) ? '_blank' : '_self'; ?>" 
-               class="ad-item"
-               style="text-decoration: none;">
-                <img src="<?php echo htmlspecialchars($ad['image_path']); ?>" 
-                     alt="<?php echo htmlspecialchars($ad['title']); ?>">
+    <div class="advertisement-label">Sponsored Advertisements</div>
+    
+    <div class="ad-rotator-container">
+        <?php foreach ($ads as $index => $ad): ?>
+            <div class="ad-item <?php echo $index === 0 ? 'active' : ''; ?>"
+                 data-ad-index="<?php echo $index; ?>">
+                <div class="ad-image-container">
+                    <?php if (!empty($ad['link_url'])): ?>
+                        <a href="<?php echo htmlspecialchars($ad['link_url']); ?>" target="_blank" style="display: block; width: 100%; height: 100%;">
+                    <?php endif; ?>
+                        <img src="<?php echo htmlspecialchars($ad['image_path']); ?>" 
+                             alt="<?php echo htmlspecialchars($ad['title']); ?>">
+                    <?php if (!empty($ad['link_url'])): ?>
+                        </a>
+                    <?php endif; ?>
+                    
+                    <!-- COMPANY BADGE -->
+                    <div class="ad-company-badge">
+                        <div class="ad-company-icon">AD</div>
+                        <div>
+                            <div class="ad-company-name"><?php echo htmlspecialchars($ad['title']); ?></div>
+                            <?php if (!empty($ad['description'])): ?>
+                                <div class="ad-company-tagline">
+                                    <?php 
+                                        $desc = htmlspecialchars($ad['description']);
+                                        echo strlen($desc) > 40 ? substr($desc, 0, 40) . '...' : $desc;
+                                    ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    
+
+                </div>
+                
                 <div class="ad-content">
                     <h3 class="ad-title"><?php echo htmlspecialchars($ad['title']); ?></h3>
                     <?php if (!empty($ad['description'])): ?>
                         <p class="ad-description">
                             <?php 
                                 $desc = htmlspecialchars($ad['description']);
-                                echo strlen($desc) > 100 ? substr($desc, 0, 100) . '...' : $desc;
+                                echo strlen($desc) > 150 ? substr($desc, 0, 150) . '...' : $desc;
                             ?>
                         </p>
                     <?php endif; ?>
                 </div>
-            </a>
-        <?php endwhile; ?>
+            </div>
+        <?php endforeach; ?>
     </div>
+    
+    <!-- NAVIGATION DOTS -->
+    <?php if (count($ads) > 1): ?>
+    <div class="ad-dots">
+        <?php foreach ($ads as $index => $ad): ?>
+            <span class="ad-dot <?php echo $index === 0 ? 'active' : ''; ?>" 
+                  data-dot-index="<?php echo $index; ?>"
+                  onclick="changeAd(<?php echo $index; ?>)"></span>
+        <?php endforeach; ?>
+    </div>
+    <div class="ad-counter">
+        <span id="current-ad">1</span> / <?php echo count($ads); ?>
+    </div>
+    <?php endif; ?>
 </div>
+
+<script>
+    // Ad Rotator JavaScript
+    let currentAdIndex = 0;
+    const totalAds = <?php echo count($ads); ?>;
+    let autoRotateInterval;
+
+    function changeAd(newIndex) {
+        // Get current ad and dot
+        const currentAd = document.querySelector('.ad-item.active');
+        const currentDot = document.querySelector('.ad-dot.active');
+        
+        // Add exit animation to current ad
+        if (currentAd) {
+            currentAd.classList.add('exiting');
+            
+            // Wait for exit animation to complete before showing new ad
+            setTimeout(() => {
+                currentAd.classList.remove('active', 'exiting');
+                
+                // Update index
+                currentAdIndex = newIndex;
+                
+                // Add active class to new ad
+                const newAd = document.querySelector(`.ad-item[data-ad-index="${newIndex}"]`);
+                const newDot = document.querySelector(`.ad-dot[data-dot-index="${newIndex}"]`);
+                
+                if (currentDot) currentDot.classList.remove('active');
+                if (newAd) newAd.classList.add('active');
+                if (newDot) newDot.classList.add('active');
+                
+                // Update counter
+                const counterElement = document.getElementById('current-ad');
+                if (counterElement) {
+                    counterElement.textContent = newIndex + 1;
+                }
+            }, 300); // Half of animation duration for smoother overlap
+        } else {
+            // First load or no current ad
+            currentAdIndex = newIndex;
+            
+            const newAd = document.querySelector(`.ad-item[data-ad-index="${newIndex}"]`);
+            const newDot = document.querySelector(`.ad-dot[data-dot-index="${newIndex}"]`);
+            
+            if (currentDot) currentDot.classList.remove('active');
+            if (newAd) newAd.classList.add('active');
+            if (newDot) newDot.classList.add('active');
+            
+            const counterElement = document.getElementById('current-ad');
+            if (counterElement) {
+                counterElement.textContent = newIndex + 1;
+            }
+        }
+        
+        // Reset auto-rotation timer
+        resetAutoRotate();
+    }
+
+    function nextAd() {
+        const nextIndex = (currentAdIndex + 1) % totalAds;
+        changeAd(nextIndex);
+    }
+
+    function startAutoRotate() {
+        // Rotate every 10 seconds (2000 milliseconds)
+        autoRotateInterval = setInterval(nextAd, 10000);
+    }
+
+    function resetAutoRotate() {
+        clearInterval(autoRotateInterval);
+        startAutoRotate();
+    }
+
+    // Start auto-rotation when page loads
+    if (totalAds > 1) {
+        startAutoRotate();
+    }
+
+    // Pause rotation when user hovers over ad
+    document.querySelectorAll('.ad-item').forEach(ad => {
+        ad.addEventListener('mouseenter', () => {
+            clearInterval(autoRotateInterval);
+        });
+        
+        ad.addEventListener('mouseleave', () => {
+            if (totalAds > 1) {
+                startAutoRotate();
+            }
+        });
+    });
+</script>
 
 <?php endif; ?>

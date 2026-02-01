@@ -5,10 +5,10 @@ $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $username = $_POST['username'];
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = $_POST['password'];
 
-    /* CHECK IF USERNAME EXISTS */
+    /* CHECK IF USERNAME EXISTS (case-sensitive) */
     $check = mysqli_query($conn,
         "SELECT id FROM users WHERE username='$username'"
     );
@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        /* REGISTER AS COMPANY USER ONLY */
+        /* REGISTER AS COMPANY USER */
         mysqli_query($conn,
             "INSERT INTO users (username, password, role)
              VALUES ('$username', '$hash', 'company')"
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="description" content="Register your company to list your business">
     <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
 </head>
-<body>
+<body class="auth-page">
 
 <!-- NAVBAR -->
 <nav class="navbar">
@@ -47,10 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="navbar-header">
             <div class="navbar-brand">Business Portal</div>
             <div class="navbar-menu">
-                <a href="index.php">🏠 Home</a>
-                <a href="login.php?role=company">🏢 Company Login</a>
-                <a href="login.php?role=admin">👑 Admin Login</a>
-                <a href="about.php">ℹ️ About</a>
+                <a href="index.php">Home</a>
+                <a href="login.php?role=company">Company Login</a>
+                <a href="login.php?role=admin">Admin Login</a>
+                <a href="about.php">About</a>
             </div>
         </div>
     </div>
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        🏢 Company Registration
+        Company Registration
     </div>
 </div>
 
@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             minlength="6"
         >
 
-        <button type="submit">✅ Register</button>
+        <button type="submit">Register</button>
 
         <?php if ($error != "") { ?>
             <p class="error-message">

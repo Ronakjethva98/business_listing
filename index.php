@@ -6,8 +6,8 @@ include "db.php";
 $isLoggedIn = isset($_SESSION['user_id']);
 $userRole = $_SESSION['role'] ?? 'normal';
 
-$search   = $_GET['search'] ?? '';
-$category = $_GET['category'] ?? '';
+$search   = mysqli_real_escape_string($conn, $_GET['search'] ?? '');
+$category = mysqli_real_escape_string($conn, $_GET['category'] ?? '');
 
 /* FETCH DISTINCT CATEGORIES */
 $catResult = mysqli_query($conn, "SELECT DISTINCT category FROM businesses");
@@ -32,7 +32,7 @@ $result = mysqli_query($conn, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Businesses - Business Listing Portal</title>
     <meta name="description" content="Explore and discover businesses, search by category and send inquiries">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
     <style>
         .inquiry-btn {
             width: 100%;
@@ -101,12 +101,15 @@ $result = mysqli_query($conn, $sql);
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        🏪 Browse Businesses
+        Browse Businesses
     </div>
 </div>
 
 <!-- CONTENT -->
 <div class="content">
+
+    <!-- ADVERTISEMENTS -->
+    <?php include "display_ads.php"; ?>
 
     <!-- SEARCH + CATEGORY FILTER -->
     <form method="GET" class="search-form">
@@ -128,16 +131,13 @@ $result = mysqli_query($conn, $sql);
             <?php } ?>
         </select>
 
-        <button type="submit">🔍 Search</button>
+        <button type="submit">Search</button>
 
         <a href="index.php">
-            <button type="button">🔄 Reset</button>
+            <button type="button">Reset</button>
         </a>
 
     </form>
-
-    <!-- ADVERTISEMENTS -->
-    <?php include "display_ads.php"; ?>
 
     <!-- BUSINESS LIST -->
     <div class="card-grid">
@@ -158,17 +158,19 @@ $result = mysqli_query($conn, $sql);
 
                         <!-- BUSINESS INFO -->
                         <div>
-                            <h3><?php echo $b['name']; ?></h3>
-                            <p><b>Category:</b> <?php echo $b['category']; ?></p>
-                            <p><b>Address:</b> <?php echo $b['address']; ?></p>
-                            <p><b>Phone:</b> <?php echo $b['phone']; ?></p>
-                            <p><?php echo $b['description']; ?></p>
+                            <h3><?php echo htmlspecialchars($b['name']); ?></h3>
+                            <p><b>Category:</b> <?php echo htmlspecialchars($b['category']); ?></p>
+                            <p><b>Address:</b> <?php echo htmlspecialchars($b['address']); ?></p>
+                            <p><b>Phone:</b> <?php echo htmlspecialchars($b['phone']); ?></p>
+                            <p> <?php if (!empty($b['description'])): ?>
+                            <p><b>Description:</b> <?php echo htmlspecialchars($b['description']); ?></p>
+                        <?php endif; ?></p>
                         </div>
 
                         <!-- SEND INQUIRY BUTTON (ALIGNED BOTTOM) -->
                         <div style="margin-top:auto; padding-top: 12px;">
                             <a href="inquiry.php?business=<?php echo urlencode($b['name']); ?>" class="inquiry-btn">
-                                ✉️ Send Inquiry
+                                Send Inquiry
                             </a>
                         </div>
 
