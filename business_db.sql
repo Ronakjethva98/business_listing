@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 02, 2026 at 05:23 AM
+-- Generation Time: Feb 05, 2026 at 06:02 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -53,13 +53,9 @@ CREATE TABLE `advertisements` (
 --
 
 INSERT INTO `advertisements` (`id`, `company_id`, `title`, `description`, `image_path`, `link_url`, `start_date`, `end_date`, `days_duration`, `cost_per_day`, `total_cost`, `is_paid`, `status`, `admin_notes`, `created_at`, `updated_at`, `approved_by`, `approved_at`) VALUES
-(2, 11, 'MS University', 'Bca \r\nBBA', 'uploads/ads/ad_697844114433f5.32152210.png', 'https://www.msubaroda.ac.in/', '2026-01-30', '2026-03-01', 30, 100.00, 3000.00, 1, 'approved', NULL, '2026-01-27 04:50:25', '2026-01-30 05:15:33', 1, '2026-01-27 04:51:10'),
 (3, 11, 'Parul University', 'MCA\r\nMBA\r\nMCOM', 'uploads/advertisements/ad_1769748318_697c375ea003f.jpeg', 'https://paruluniversity.ac.in/master_2026_gsn/?utm_source=google_search_ls_brand&utm_medium=Brand_Gujarat&utm_campaign=LS_Google_Search_Brand_2026_Gujarat_26thSept25&utm_adgroup=Brand_Core&utm_term=parul%20university&utm_network=g&utm_matchtype=e&utm_devi', '2026-01-30', '2026-03-01', 30, 100.00, 3000.00, 1, 'approved', NULL, '2026-01-28 04:49:09', '2026-01-30 05:15:33', 1, '2026-01-28 04:49:49'),
 (4, 11, 'Darshan Uni', 'MCA', 'uploads/advertisements/ad_1769748175_697c36cfc9386.jpeg', 'https://darshan.ac.in/', '2026-01-30', '2026-03-01', 30, 100.00, 3000.00, 1, 'approved', NULL, '2026-01-28 05:27:53', '2026-01-30 05:15:33', 1, '2026-01-28 05:28:20'),
-(5, 14, 'MKBU', 'MCA \r\nBCA', 'uploads/ads/ad_697c324bb77b87.42687342.png', 'https://mkbhavuni.edu.in/mkbhavuniweb/', '2026-01-30', '2026-03-01', 30, 100.00, 3000.00, 1, 'approved', NULL, '2026-01-30 04:23:39', '2026-01-30 05:15:33', 1, '2026-01-30 04:24:56'),
-(6, 11, 'GTU', 'Gujarat UNI', 'uploads/ads/ad_697c3ad487a4a1.92487522.jpeg', 'https://www.gtu.ac.in/', '2026-01-30', '2026-03-01', 30, 100.00, 3000.00, 1, 'approved', NULL, '2026-01-30 05:00:04', '2026-01-31 04:11:35', 1, '2026-01-31 04:11:35'),
-(7, 11, 'KL UNI', 'MCA MBA', 'uploads/ads/ad_697c40ed1e1535.50452345.jpeg', 'https://www.kluniversity.in/admissions/?utm_source=Google+Ads&utm_medium=LeadGen&utm_campaign=Generic+Target+States&utm_term=4+Year+College&utm_campaignid=23149912759&utm_matchtype=e&utm_device=c&utm_network=g&utm_keyword=academic%20colleges&utm_placement', '2026-01-30', '2026-02-04', 6, 100.00, 600.00, 1, 'approved', NULL, '2026-01-30 05:26:05', '2026-02-02 03:59:47', 1, '2026-02-02 03:59:47'),
-(8, 11, 'Gyanmanjary UNI', 'MCA MBA', 'uploads/ads/ad_6980252f3ff449.15705645.jpeg', 'https://gmiu.edu.in/gmiu/website/', '2026-02-02', '2026-02-07', 6, 100.00, 600.00, 1, 'approved', NULL, '2026-02-02 04:16:47', '2026-02-02 04:21:51', 1, '2026-02-02 04:21:51');
+(5, 14, 'MKBU', 'MCA \r\nBCA', 'uploads/ads/ad_697c324bb77b87.42687342.png', 'https://mkbhavuni.edu.in/mkbhavuniweb/', '2026-01-30', '2026-03-01', 30, 100.00, 3000.00, 1, 'approved', NULL, '2026-01-30 04:23:39', '2026-01-30 05:15:33', 1, '2026-01-30 04:24:56');
 
 -- --------------------------------------------------------
 
@@ -109,6 +105,7 @@ CREATE TABLE `inquiries` (
   `email` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `message` text DEFAULT NULL,
+  `is_read` tinyint(1) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -116,9 +113,10 @@ CREATE TABLE `inquiries` (
 -- Dumping data for table `inquiries`
 --
 
-INSERT INTO `inquiries` (`id`, `business_name`, `name`, `email`, `phone`, `message`, `created_at`) VALUES
-(3, 'IT Hub Software Solution', 'ronak', 'jethva@gmail.com', '9048545645', 'my business website', '2026-01-19 05:09:14'),
-(4, 'Bright Future Coaching Classes', 'ronak', 'jethvaronak98@gmail.com', '', '9', '2026-01-29 17:07:53');
+INSERT INTO `inquiries` (`id`, `business_name`, `name`, `email`, `phone`, `message`, `is_read`, `created_at`) VALUES
+(3, 'IT Hub Software Solution', 'ronak', 'jethva@gmail.com', '9048545645', 'my business website', 1, '2026-01-19 05:09:14'),
+(5, 'IT Hub Software Solution', 'Ronak', 'jethvaronak98@gmail.com', '9876543210', 'develop site', 1, '2026-02-05 04:38:20'),
+(6, 'Shree Krishna Grocery Store', 'raj', 'Raj123@gmail.com', '9048545645', 'buy fruites', 1, '2026-02-05 04:39:34');
 
 -- --------------------------------------------------------
 
@@ -139,7 +137,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
 (1, 'admin', '$2y$10$keDJiwlap1qTHLWXsx5bt.vL5qvqJcbDW7qhLyos0dkPgPdeGfhEW', 'admin'),
-(11, 'IT Hub Software', '$2y$10$UNpEh.tyE8CxH1iohzHr..K8SJD5VC5gn1FPakEoQ7ZIljCi9KuWu', 'company'),
+(11, 'IT Hub Software', '$2y$10$QL5VgF2XBI/0Ue4h3AyI9eOiWve9xQBnJPAkao0m7PMdYLaR3vC6G', 'company'),
 (12, 'ronakj', '$2y$10$5gF0gaW9I661iS/.Re4mMeEsx2YBezi.IT4Hk7JgtUu0n/TXKo7qK', 'admin'),
 (14, 'Uni', '$2y$10$/3knJz9kcI8n4wpqBNNj8.CWvZVgHQn2kdeo2sxR1ZDpeEO0nqcJy', 'company');
 
@@ -196,7 +194,7 @@ ALTER TABLE `businesses`
 -- AUTO_INCREMENT for table `inquiries`
 --
 ALTER TABLE `inquiries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
