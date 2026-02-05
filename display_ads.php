@@ -43,9 +43,11 @@ if (count($ads) > 0):
     .ad-rotator-container {
         position: relative;
         width: 100%;
-        max-width: 800px;
+        max-width: 850px; /* Decreased from 1000px */
         margin: 0 auto;
         overflow: hidden;
+        border-radius: 16px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.12);
     }
     
     /* KEYFRAME ANIMATIONS */
@@ -100,16 +102,50 @@ if (count($ads) > 0):
     .ad-image-container {
         position: relative;
         width: 100%;
-        height: 300px;
+        height: 350px; /* Decreased from 450px */
         overflow: hidden;
         background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+    }
+
+    /* BLURRED BACKGROUND FOR PREMIUM LOOK */
+    .ad-image-blur {
+        position: absolute;
+        top: -20px;
+        left: -20px;
+        right: -20px;
+        bottom: -20px;
+        background-size: cover;
+        background-position: center;
+        filter: blur(20px) brightness(0.4);
+        z-index: 1;
+        opacity: 0.8;
     }
     
     .ad-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        position: relative;
+        z-index: 2;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
         display: block;
+        image-rendering: -webkit-optimize-contrast;
+        filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .ad-item.active img {
+        animation: hd-entry 1s ease-out;
+    }
+
+    @keyframes hd-entry {
+        0% { filter: brightness(1.1) contrast(1.1) blur(1px); }
+        100% { filter: brightness(1.02) contrast(1.05) blur(0); }
     }
     
     /* COMPANY LOGO BADGE */
@@ -125,6 +161,7 @@ if (count($ads) > 0):
         gap: 8px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         backdrop-filter: blur(10px);
+        z-index: 10; /* Added to stay on top */
     }
     
     .ad-company-icon {
@@ -252,13 +289,23 @@ if (count($ads) > 0):
             <div class="ad-item <?php echo $index === 0 ? 'active' : ''; ?>"
                  data-ad-index="<?php echo $index; ?>">
                 <div class="ad-image-container">
+                    <!-- Blurred background -->
+                    <div class="ad-image-blur" style="background-image: url('<?php echo htmlspecialchars($ad['image_path']); ?>');"></div>
+                    
                     <?php if (!empty($ad['link_url'])): ?>
-                        <a href="<?php echo htmlspecialchars($ad['link_url']); ?>" target="_blank" style="display: block; width: 100%; height: 100%;">
+                        <a href="<?php echo htmlspecialchars($ad['link_url']); ?>" target="_blank" 
+                           style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative; z-index: 3; text-decoration: none;">
+                    <?php else: ?>
+                        <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative; z-index: 3;">
                     <?php endif; ?>
+                        
                         <img src="<?php echo htmlspecialchars($ad['image_path']); ?>" 
                              alt="<?php echo htmlspecialchars($ad['title']); ?>">
+                             
                     <?php if (!empty($ad['link_url'])): ?>
                         </a>
+                    <?php else: ?>
+                        </div>
                     <?php endif; ?>
                     
                     <!-- COMPANY BADGE -->

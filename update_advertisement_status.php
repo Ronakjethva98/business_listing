@@ -2,9 +2,9 @@
 include "auth.php";
 include "db.php";
 
-/* BLOCK NON-ADMIN USERS */
-if ($_SESSION['role'] !== 'admin') {
-    header("Location: index.php");
+/* BLOCK GUESTS AND REDIRECT BASED ON ACTION */
+if (!isset($_SESSION['role'])) {
+    header("Location: login.php");
     exit();
 }
 
@@ -16,13 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $ad_id = mysqli_real_escape_string($conn, $_POST['ad_id']);
 $action = mysqli_real_escape_string($conn, $_POST['action']);
-$admin_id = $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'];
+$user_role = $_SESSION['role'];
 
 if ($action == 'approve') {
+    if ($user_role !== 'admin') { header("Location: dashboard.php"); exit(); }
+    
     /* APPROVE ADVERTISEMENT */
     $sql = "UPDATE advertisements 
             SET status='approved', 
-                approved_by='$admin_id', 
+                approved_by='$user_id', 
                 approved_at=NOW() 
             WHERE id='$ad_id'";
     
@@ -33,6 +36,8 @@ if ($action == 'approve') {
     }
     
 } elseif ($action == 'reject') {
+    if ($user_role !== 'admin') { header("Location: dashboard.php"); exit(); }
+    
     /* REJECT ADVERTISEMENT */
     $admin_notes = mysqli_real_escape_string($conn, trim($_POST['admin_notes']));
     
@@ -49,9 +54,16 @@ if ($action == 'approve') {
     
 } elseif ($action == 'delete') {
     /* DELETE ADVERTISEMENT */
-    // First get the image path to delete the file
-    $result = mysqli_query($conn, "SELECT image_path FROM advertisements WHERE id='$ad_id'");
+    // Security Check: Company can only delete their own ads
+    $check_sql = "SELECT image_path, company_id FROM advertisements WHERE id='$ad_id'";
+    $result = mysqli_query($conn, $check_sql);
+    
     if ($row = mysqli_fetch_assoc($result)) {
+        if ($user_role !== 'admin' && $row['company_id'] != $user_id) {
+            header("Location: my_advertisements.php?error=unauthorized");
+            exit();
+        }
+
         $image_path = $row['image_path'];
         
         // Delete from database
@@ -62,12 +74,17 @@ if ($action == 'approve') {
             if (file_exists($image_path)) {
                 unlink($image_path);
             }
-            header("Location: manage_advertisements.php?success=deleted");
+            
+            // Redirect based on role
+            $redirect = ($user_role === 'admin') ? "manage_advertisements.php" : "my_advertisements.php";
+            header("Location: $redirect?success=deleted");
         } else {
-            header("Location: manage_advertisements.php?error=1");
+            $redirect = ($user_role === 'admin') ? "manage_advertisements.php" : "my_advertisements.php";
+            header("Location: $redirect?error=1");
         }
     } else {
-        header("Location: manage_advertisements.php?error=1");
+        $redirect = ($user_role === 'admin') ? "manage_advertisements.php" : "my_advertisements.php";
+        header("Location: $redirect?error=1");
     }
 }
 

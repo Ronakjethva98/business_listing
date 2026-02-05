@@ -45,7 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <a href="index.php">Home</a>
                 <a href="login.php?role=company">Company Login</a>
@@ -95,6 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

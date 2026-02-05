@@ -46,7 +46,10 @@ $rejected_count = mysqli_fetch_assoc(mysqli_query($conn, $rejected_sql))['count'
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
                 <a href="dashboard.php">Home</a>
@@ -91,7 +94,20 @@ $rejected_count = mysqli_fetch_assoc(mysqli_query($conn, $rejected_sql))['count'
                 ✓ Advertisement rejected!
             <?php elseif ($_GET['success'] == 'deleted'): ?>
                 ✓ Advertisement deleted!
+            <?php elseif ($_GET['success'] == 'payment_updated'): ?>
+                ✓ Advertisement marked as PAID successfully!
             <?php endif; ?>
+
+    <!-- ERROR MESSAGE -->
+    <?php if (isset($_GET['error'])): ?>
+        <div class="error-message">
+            <?php if ($_GET['error'] == 'payment_update_failed'): ?>
+                ✗ Failed to update payment status.
+            <?php else: ?>
+                ✗ An error occurred while processing your request.
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
         </div>
     <?php endif; ?>
 
@@ -137,7 +153,7 @@ $rejected_count = mysqli_fetch_assoc(mysqli_query($conn, $rejected_sql))['count'
                                 <strong>Status:</strong>
                                 <span>
                                     <span class="status-badge status-<?php echo $ad['status']; ?>">
-                                        <?php echo ucfirst($ad['status']); ?>
+                                        <?php if ($ad['status'] == 'pending') echo '⏳ '; elseif ($ad['status'] == 'approved') echo '✅ '; else echo '❌ '; ?><?php echo ucfirst($ad['status']); ?>
                                     </span>
                                 </span>
                             </div>
@@ -261,6 +277,8 @@ window.onclick = function(event) {
     }
 }
 </script>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

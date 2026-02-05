@@ -60,7 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <a href="index.php">Home</a>
                 <a href="login.php?role=company">Company Login</a>
@@ -74,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        <?php echo $role === 'admin' ? 'Admin Login Portal' : ($role === 'company' ? 'Company Login Portal' : 'Login to Your Account'); ?>
+        <?php echo $role === 'admin' ? '🔑 Admin Login Portal' : ($role === 'company' ? '💼 Company Login Portal' : '👤 Login to Your Account'); ?>
     </div>
 </div>
 
@@ -105,6 +108,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php } ?>
     </form>
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

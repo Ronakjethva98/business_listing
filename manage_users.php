@@ -44,7 +44,10 @@ $result = mysqli_query($conn,
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
                <a href="dashboard.php">Home</a>
@@ -54,7 +57,7 @@ $result = mysqli_query($conn,
                     <a href="view_inquiries.php">View Inquiries</a>
                     <a href="about.php">About</a>
                 <?php } elseif ($_SESSION['role'] === 'admin') { ?>
-                   <a href="manage_users.php">Manage Users</a>
+                    <a href="manage_users.php">Manage Users</a>
                     <a href="manage_advertisements.php">Manage Ads</a>
                     <a href="view_inquiries.php">View Inquiries</a>
                     <a href="view_admin.php">View Admin</a>
@@ -99,14 +102,17 @@ $result = mysqli_query($conn,
                 <tbody>
                     <?php while ($u = mysqli_fetch_assoc($result)) { ?>
                         <tr>
-                            <td class="username-cell"><?php echo htmlspecialchars($u['username']); ?></td>
-                            <td>
+                            <td class="username-cell" data-label="Username"><?php echo htmlspecialchars($u['username']); ?></td>
+                            <td data-label="Role">
                                 <span class="role-badge"><?php echo ucfirst($u['role']); ?></span>
                             </td>
-                            <td>
+                            <td data-label="Action">
+                                <a href="edit_user_password.php?id=<?php echo $u['id']; ?>" class="edit-btn">
+                                    Edit
+                                </a>
                                 <a href="manage_users.php?delete=<?php echo $u['id']; ?>"
-                                   class="delete-btn"
-                                   onclick="return confirm('Are you sure you want to delete this company user?')">
+                                    class="delete-btn"
+                                    onclick="return confirm('Are you sure you want to delete this company user?')">
                                     Delete
                                 </a>
                             </td>
@@ -123,6 +129,8 @@ $result = mysqli_query($conn,
     </div>
 
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

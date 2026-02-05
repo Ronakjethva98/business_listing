@@ -64,6 +64,20 @@ if ($_SESSION['role'] === 'company') {
         "SELECT * FROM inquiries ORDER BY id DESC"
     );
 }
+
+/* FETCH UNREAD INQUIRY COUNT (BEFORE MARKING READ) */
+$unreadCount = getUnreadInquiryCount($conn, $_SESSION['user_id'], $_SESSION['role']);
+
+/* MARK ALL AS READ */
+if ($_SESSION['role'] === 'company') {
+    $uid = $_SESSION['user_id'];
+    mysqli_query($conn, "UPDATE inquiries i 
+                        JOIN businesses b ON i.business_name = b.name 
+                        SET i.is_read = 1 
+                        WHERE b.user_id = '$uid' AND i.is_read = 0");
+} else {
+    mysqli_query($conn, "UPDATE inquiries SET is_read = 1 WHERE is_read = 0");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,7 +94,10 @@ if ($_SESSION['role'] === 'company') {
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
                 <a href="dashboard.php">Home</a>
@@ -89,12 +106,22 @@ if ($_SESSION['role'] === 'company') {
                     <a href="add_business.php">Add Business</a>
                     <a href="my_advertisements.php">My Ads</a>
                     <a href="submit_advertisement.php">Submit Ad</a>
-                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="view_inquiries.php" class="nav-inquiry-link">
+                        View Inquiries
+                        <?php if ($unreadCount > 0): ?>
+                            <span class="notification-badge"><?php echo $unreadCount; ?></span>
+                        <?php endif; ?>
+                    </a>
                     <a href="about.php">About</a>
                 <?php } elseif ($_SESSION['role'] === 'admin') { ?>
                     <a href="manage_users.php">Manage Users</a>
                     <a href="manage_advertisements.php">Manage Ads</a>
-                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="view_inquiries.php" class="nav-inquiry-link">
+                        View Inquiries
+                        <?php if ($unreadCount > 0): ?>
+                            <span class="notification-badge"><?php echo $unreadCount; ?></span>
+                        <?php endif; ?>
+                    </a>
                     <a href="view_admin.php">View Admin</a>
                     <a href="add_admin.php">Add Admin</a>
                     <a href="about.php">About</a>
@@ -130,7 +157,7 @@ if ($_SESSION['role'] === 'company') {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>🏢 Business</th>
+                        <th>Business</th>
                         <th>👤 Customer Name</th>
                         <th>📧 Email</th>
                         <th>📱 Phone</th>
@@ -140,17 +167,19 @@ if ($_SESSION['role'] === 'company') {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $i = 1; while ($row = mysqli_fetch_assoc($result)) { ?>
-                        <tr>
-                            <td class="inquiry-id"><?php echo $i++; ?></td>
-                            <td class="business-name"><?php echo htmlspecialchars($row['business_name']); ?></td>
-                            <td><?php echo htmlspecialchars($row['name']); ?></td>
-                            <td class="email-cell"><?php echo htmlspecialchars($row['email']); ?></td>
-                            <td><?php echo htmlspecialchars($row['phone'] ?: '-'); ?></td>
-                            <td class="message-cell" title="<?php echo htmlspecialchars($row['message']); ?>">
+                    <?php $i = 1; while ($row = mysqli_fetch_assoc($result)) { 
+                        $statusClass = ($row['is_read'] == 0) ? 'inquiry-unread' : '';
+                    ?>
+                        <tr class="<?php echo $statusClass; ?>">
+                            <td class="inquiry-id" data-label="#"><?php echo $i++; ?></td>
+                            <td class="business-name" data-label="Business"><?php echo htmlspecialchars($row['business_name']); ?></td>
+                            <td data-label="Customer"><?php echo htmlspecialchars($row['name']); ?></td>
+                            <td class="email-cell" data-label="Email"><?php echo htmlspecialchars($row['email']); ?></td>
+                            <td data-label="Phone"><?php echo htmlspecialchars($row['phone'] ?: '-'); ?></td>
+                            <td class="message-cell" data-label="Message" title="<?php echo htmlspecialchars($row['message']); ?>">
                                 <?php echo htmlspecialchars($row['message']); ?>
                             </td>
-                            <td>
+                            <td data-label="Date">
                                 <span class="date-badge">
                                     <?php
                                     echo isset($row['created_at'])
@@ -159,7 +188,7 @@ if ($_SESSION['role'] === 'company') {
                                     ?>
                                 </span>
                             </td>
-                            <td>
+                            <td data-label="Action">
                                 <a href="view_inquiries.php?delete=<?php echo $row['id']; ?>"
                                    class="delete-inquiry-btn"
                                    onclick="return confirm('Are you sure you want to delete this inquiry?')">
@@ -179,6 +208,8 @@ if ($_SESSION['role'] === 'company') {
     </div>
 
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

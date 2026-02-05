@@ -33,6 +33,9 @@ if ($category != '') {
 }
 
 $result = mysqli_query($conn, $sql);
+
+/* FETCH UNREAD INQUIRY COUNT */
+$unreadCount = getUnreadInquiryCount($conn, $_SESSION['user_id'], $_SESSION['role']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,7 +52,10 @@ $result = mysqli_query($conn, $sql);
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
                 <a href="dashboard.php">Home</a>
@@ -58,12 +64,22 @@ $result = mysqli_query($conn, $sql);
                     <a href="add_business.php">Add Business</a>
                     <a href="my_advertisements.php">My Ads</a>
                     <a href="submit_advertisement.php">Submit Ad</a>
-                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="view_inquiries.php" class="nav-inquiry-link">
+                        View Inquiries
+                        <?php if ($unreadCount > 0): ?>
+                            <span class="notification-badge"><?php echo $unreadCount; ?></span>
+                        <?php endif; ?>
+                    </a>
                     <a href="about.php">About</a>
                 <?php } elseif ($_SESSION['role'] === 'admin') { ?>
                     <a href="manage_users.php">Manage Users</a>
                     <a href="manage_advertisements.php">Manage Ads</a>
-                    <a href="view_inquiries.php">View Inquiries</a>
+                    <a href="view_inquiries.php" class="nav-inquiry-link">
+                        View Inquiries
+                        <?php if ($unreadCount > 0): ?>
+                            <span class="notification-badge"><?php echo $unreadCount; ?></span>
+                        <?php endif; ?>
+                    </a>
                     <a href="view_admin.php">View Admin</a>
                     <a href="add_admin.php">Add Admin</a>
                     <a href="about.php">About</a>
@@ -78,7 +94,7 @@ $result = mysqli_query($conn, $sql);
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        Welcome, <?php echo ucfirst($_SESSION['role']); ?>
+        👋 Welcome, <?php echo ucfirst($_SESSION['role']); ?>
     </div>
 </div>
 
@@ -177,6 +193,8 @@ $result = mysqli_query($conn, $sql);
     </div>
 
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

@@ -46,7 +46,10 @@ $result = mysqli_query($conn,
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
                 <a href="dashboard.php">Home</a>
@@ -103,16 +106,16 @@ $result = mysqli_query($conn,
                 <tbody>
                     <?php while ($u = mysqli_fetch_assoc($result)) { ?>
                         <tr>
-                            <td class="username-cell">
+                            <td class="username-cell" data-label="Username">
                                 <?php echo htmlspecialchars($u['username']); ?>
                                 <?php if ($u['id'] == $_SESSION['user_id']) { ?>
                                     <span class="current-user-badge">You</span>
                                 <?php } ?>
                             </td>
-                            <td>
+                            <td data-label="Role">
                                 <span class="role-badge"><?php echo ucfirst($u['role']); ?></span>
                             </td>
-                            <td>
+                            <td data-label="Actions">
                                 <a href="edit_admin.php?id=<?php echo $u['id']; ?>" class="action-edit">
                                     Edit
                                 </a>
@@ -142,6 +145,8 @@ $result = mysqli_query($conn,
     </div>
 
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

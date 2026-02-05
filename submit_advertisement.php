@@ -23,7 +23,10 @@ if ($_SESSION['role'] !== 'company') {
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
                 <a href="dashboard.php">Home</a>
@@ -88,24 +91,24 @@ if ($_SESSION['role'] !== 'company') {
             Submit your advertisement for admin approval. Once approved, it will appear across the website.
         </p>
         
-        <label>Advertisement Title *</label>
+        <label>📝 Advertisement Title *</label>
         <input type="text" name="title" required maxlength="255" placeholder="Enter advertisement title">
         
-        <label>Description (Optional)</label>
+        <label>ℹ️ Description (Optional)</label>
         <textarea name="description" rows="4" placeholder="Enter advertisement description"></textarea>
         
-        <label>Advertisement Image * (Max 2MB, JPEG/PNG)</label>
+        <label>🖼️ Advertisement Image * (Max 2MB, JPEG/PNG)</label>
         <input type="file" name="ad_image" accept="image/jpeg,image/png,image/jpg" required>
         <small style="color: #666; display: block; margin-top: 8px; margin-bottom: 16px;">Recommended size: 800x400px for best display</small>
         
-        <label>Link URL (Optional)</label>
+        <label>🔗 Link URL (Optional)</label>
         <input type="url" name="link_url" id="link_url" placeholder="https://example.com">
         <small style="color: #666; display: block; margin-top: 8px; margin-bottom: 16px;">Where should users go when they click your ad?</small>
         
-        <label>Advertisement Start Date *</label>
+        <label>📅 Advertisement Start Date *</label>
         <input type="date" name="start_date" id="start_date" required min="<?php echo date('Y-m-d'); ?>">
         
-        <label>Advertisement End Date *</label>
+        <label>📆 Advertisement End Date *</label>
         <input type="date" name="end_date" id="end_date" required>
         <small style="color: #666; display: block; margin-top: 8px; margin-bottom: 16px;">Select when your advertisement should stop displaying</small>
         
@@ -119,9 +122,15 @@ if ($_SESSION['role'] !== 'company') {
             </div>
             <div style="background: #fef3c7; padding: 14px; border-radius: 8px; border-left: 4px solid #f59e0b;">
                 <p style="margin: 0 0 10px 0; font-weight: 600; color: #92400e; font-size: 15px;">To activate your advertisement:</p>
-                <p style="margin: 0 0 6px 0; color: #78350f;"><strong>📞 Phone:</strong> +91 XXXXX XXXXX</p>
-                <p style="margin: 0 0 10px 0; color: #78350f;"><strong>📧 Email:</strong> admin@businessportal.com</p>
-                <p style="margin: 0; color: #78350f; font-size: 13px;">Payment via Bank Transfer, UPI, or Cash</p>
+                <div style="color: #78350f; font-size: 14px;">
+                    <p style="margin: 0 0 6px 0;"><strong>📞 Phone:</strong> +91 9327060890</p>
+                    <p style="margin: 0 0 10px 0;"><strong>📧 Email:</strong> jethvaronak98@gmail.com</p>
+                    <div style="text-align: center; margin: 10px 0; background: white; padding: 10px; border-radius: 8px;">
+                        <p style="margin: 0 0 5px 0; font-weight: 600; color: #1e293b; font-size: 12px;">Scan to Pay</p>
+                        <img src="assets/payment_qr.png" alt="Payment Scanner" style="max-width: 150px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    </div>
+                </div>
+                <p style="margin: 0; color: #78350f; font-size: 13px; font-style: italic; opacity: 0.9;">Payment via Mobile no, Email-id, UPI or Scanner</p>
             </div>
         </div>
         
@@ -171,6 +180,8 @@ if ($_SESSION['role'] !== 'company') {
     </form>
 
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

@@ -10,23 +10,26 @@ if ($_SESSION['role'] !== 'company') {
 
 $company_id = $_SESSION['user_id'];
 
-/* FETCH COMPANY'S ADVERTISEMENTS */
-$sql = "SELECT * FROM advertisements WHERE company_id='$company_id' ORDER BY created_at DESC";
-$result = mysqli_query($conn, $sql);
-
-/* CALCULATE STATISTICS */
-$total_ads = mysqli_num_rows($result);
-$pending_count = 0;
-$approved_count = 0;
-$rejected_count = 0;
-
-mysqli_data_seek($result, 0); // Reset pointer
-while ($row = mysqli_fetch_assoc($result)) {
-    if ($row['status'] == 'pending') $pending_count++;
-    elseif ($row['status'] == 'approved') $approved_count++;
-    elseif ($row['status'] == 'rejected') $rejected_count++;
+/* GET FILTER */
+$filter = $_GET['filter'] ?? 'pending';
+if (!in_array($filter, ['pending', 'approved', 'rejected'])) {
+    $filter = 'pending';
 }
-mysqli_data_seek($result, 0); // Reset pointer again
+
+/* COUNT STATISTICS FOR TABS - SPECIFIC TO CURRENT COMPANY */
+$pending_sql = "SELECT COUNT(*) as count FROM advertisements WHERE company_id='$company_id' AND status='pending'";
+$approved_sql = "SELECT COUNT(*) as count FROM advertisements WHERE company_id='$company_id' AND status='approved'";
+$rejected_sql = "SELECT COUNT(*) as count FROM advertisements WHERE company_id='$company_id' AND status='rejected'";
+
+$pending_count = mysqli_fetch_assoc(mysqli_query($conn, $pending_sql))['count'];
+$approved_count = mysqli_fetch_assoc(mysqli_query($conn, $approved_sql))['count'];
+$rejected_count = mysqli_fetch_assoc(mysqli_query($conn, $rejected_sql))['count'];
+
+/* FETCH FILTERED ADVERTISEMENTS */
+$sql = "SELECT * FROM advertisements 
+        WHERE company_id='$company_id' AND status='$filter' 
+        ORDER BY created_at DESC";
+$result = mysqli_query($conn, $sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,96 +39,6 @@ mysqli_data_seek($result, 0); // Reset pointer again
     <title>My Advertisements - Business Listing Portal</title>
     <meta name="description" content="View and manage your advertisements">
     <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
-    <style>
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 24px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .stat-card h3 {
-            font-size: 36px;
-            margin: 0 0 8px 0;
-        }
-        .stat-card p {
-            margin: 0;
-            opacity: 0.9;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .status-pending {
-            background: #fef3c7;
-            color: #d97706;
-        }
-        .status-approved {
-            background: #d1fae5;
-            color: #059669;
-        }
-        .status-rejected {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-        .ad-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            table-layout: fixed;
-        }
-        .ad-table th {
-            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-            color: white;
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-        }
-        .ad-table th:nth-child(1) { width: 120px; } /* Image */
-        .ad-table th:nth-child(2) { width: 25%; } /* Title */
-        .ad-table th:nth-child(3) { width: 120px; } /* Status */
-        .ad-table th:nth-child(4) { width: 130px; } /* Submitted */
-        .ad-table th:nth-child(5) { width: auto; } /* Details */
-        .ad-table th:nth-child(6) { width: 100px; } /* Actions */
-        .ad-table td {
-            padding: 16px;
-            border-bottom: 1px solid #e5e7eb;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            vertical-align: top;
-        }
-        .ad-table tr:hover {
-            background: #f9fafb;
-        }
-        .ad-thumbnail {
-            width: 100px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .admin-notes {
-            background: #fef3c7;
-            padding: 12px;
-            border-radius: 8px;
-            border-left: 4px solid #d97706;
-            margin-top: 8px;
-            font-size: 14px;
-        }
-    </style>
 </head>
 <body>
 
@@ -133,7 +46,10 @@ mysqli_data_seek($result, 0); // Reset pointer again
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
                 <a href="dashboard.php">Home</a>
@@ -169,24 +85,25 @@ mysqli_data_seek($result, 0); // Reset pointer again
 <!-- CONTENT -->
 <div class="content">
 
-    <!-- STATISTICS -->
-    <div class="stats-grid">
-        <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            <h3><?php echo $total_ads; ?></h3>
-            <p>Total Ads</p>
-        </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-            <h3><?php echo $pending_count; ?></h3>
-            <p>Pending Review</p>
-        </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-            <h3><?php echo $approved_count; ?></h3>
-            <p>Approved</p>
-        </div>
-        <div class="stat-card" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
-            <h3><?php echo $rejected_count; ?></h3>
-            <p>Rejected</p>
-        </div>
+    <!-- MESSAGES -->
+    <?php if (isset($_GET['success']) && $_GET['success'] == 'deleted'): ?>
+        <div class="success-message">✓ Advertisement deleted successfully!</div>
+    <?php endif; ?>
+    <?php if (isset($_GET['error'])): ?>
+        <div class="error-message">✗ Failed to delete advertisement.</div>
+    <?php endif; ?>
+
+    <!-- TABS -->
+    <div class="ad-tabs">
+        <a href="?filter=pending" class="ad-tab <?php echo $filter == 'pending' ? 'active' : ''; ?>">
+            Pending (<?php echo $pending_count; ?>)
+        </a>
+        <a href="?filter=approved" class="ad-tab <?php echo $filter == 'approved' ? 'active' : ''; ?>">
+            Approved (<?php echo $approved_count; ?>)
+        </a>
+        <a href="?filter=rejected" class="ad-tab <?php echo $filter == 'rejected' ? 'active' : ''; ?>">
+            Rejected (<?php echo $rejected_count; ?>)
+        </a>
     </div>
 
     <!-- SUBMIT NEW AD BUTTON -->
@@ -199,93 +116,107 @@ mysqli_data_seek($result, 0); // Reset pointer again
         </a>
     </div>
 
-    <!-- ADVERTISEMENTS TABLE -->
-    <div class="box">
-        <?php if ($total_ads > 0): ?>
-            <div style="overflow-x: auto;">
-            <table class="ad-table">
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Title</th>
-                        <th>Status</th>
-                        <th>Submitted</th>
-                        <th>Details</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($ad = mysqli_fetch_assoc($result)): ?>
-                        <tr>
-                            <td>
-                                <img src="<?php echo htmlspecialchars($ad['image_path']); ?>" 
-                                     alt="<?php echo htmlspecialchars($ad['title']); ?>" 
-                                     class="ad-thumbnail">
-                            </td>
-                            <td>
-                                <strong><?php echo htmlspecialchars($ad['title']); ?></strong>
-                                <?php if ($ad['description']): ?>
-                                    <br><small style="color: #666;"><?php echo htmlspecialchars(substr($ad['description'], 0, 100)); ?><?php echo strlen($ad['description']) > 100 ? '...' : ''; ?></small>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <span class="status-badge status-<?php echo $ad['status']; ?>">
-                                    <?php 
-                                        if ($ad['status'] == 'pending') echo '⏳ Pending';
-                                        elseif ($ad['status'] == 'approved') echo '✓ Approved';
-                                        elseif ($ad['status'] == 'rejected') echo '✗ Rejected';
-                                    ?>
+    <!-- ADVERTISEMENTS LIST -->
+    <div class="ad-grid">
+        <?php if (mysqli_num_rows($result) > 0): ?>
+            <?php while ($ad = mysqli_fetch_assoc($result)): ?>
+                <div class="ad-card">
+                    <?php if ($ad['link_url']): ?>
+                        <a href="<?php echo htmlspecialchars($ad['link_url']); ?>" target="_blank" class="ad-image-link">
+                    <?php endif; ?>
+                        <img src="<?php echo htmlspecialchars($ad['image_path']); ?>" 
+                             alt="<?php echo htmlspecialchars($ad['title']); ?>" 
+                             class="ad-image">
+                    <?php if ($ad['link_url']): ?>
+                        </a>
+                    <?php endif; ?>
+                    
+                    <div class="ad-info">
+                        <h3><?php echo htmlspecialchars($ad['title']); ?></h3>
+                        
+                        <div class="ad-details">
+                            <div class="ad-detail-row">
+                                <strong>Status:</strong>
+                                <span>
+                                    <span class="status-badge status-<?php echo $ad['status']; ?>">
+                                        <?php 
+                                            if ($ad['status'] == 'pending') echo '⏳ Pending';
+                                            elseif ($ad['status'] == 'approved') echo '✅ Approved';
+                                            elseif ($ad['status'] == 'rejected') echo '❌ Rejected';
+                                        ?>
+                                    </span>
                                 </span>
-                            </td>
-                            <td>
-                                <?php echo date('M d, Y', strtotime($ad['created_at'])); ?>
-                                <br><small style="color: #666;"><?php echo date('h:i A', strtotime($ad['created_at'])); ?></small>
-                            </td>
-                            <td>
-                                <?php if ($ad['link_url']): ?>
-                                    <a href="<?php echo htmlspecialchars($ad['link_url']); ?>" target="_blank" style="color: #3b82f6; text-decoration: none; word-break: break-all; display: inline-block; max-width: 100%;">
-                                        🔗 View Link
-                                    </a>
-                                    <br>
-                                <?php endif; ?>
-                                
-                                <?php if ($ad['status'] == 'rejected' && $ad['admin_notes']): ?>
-                                    <div class="admin-notes">
-                                        <strong>Admin Notes:</strong><br>
-                                        <?php echo htmlspecialchars($ad['admin_notes']); ?>
-                                    </div>
-                                <?php elseif ($ad['status'] == 'approved'): ?>
-                                    <small style="color: #059669;">
-                                        ✓ Approved on <?php echo date('M d, Y', strtotime($ad['approved_at'])); ?>
-                                    </small>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <a href="edit_advertisement.php?id=<?php echo $ad['id']; ?>" style="text-decoration: none;">
-                                    <button type="button" class="btn-edit" style="padding: 8px 16px; font-size: 14px;">
-                                        ✏️ Edit
-                                    </button>
-                                </a>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-            </div>
+                            </div>
+                            
+                            <?php if ($ad['description']): ?>
+                                <div class="ad-detail-row">
+                                    <strong>Description:</strong>
+                                    <span><?php echo htmlspecialchars($ad['description']); ?></span>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <div class="ad-detail-row">
+                                <strong>Schedule:</strong>
+                                <span>
+                                    <?php echo date('M d, Y', strtotime($ad['start_date'])); ?> - 
+                                    <?php echo date('M d, Y', strtotime($ad['end_date'])); ?> 
+                                    (<?php echo $ad['days_duration']; ?> days)
+                                </span>
+                            </div>
+                            
+                            <div class="ad-detail-row">
+                                <strong>Cost:</strong>
+                                <span>₹<?php echo number_format($ad['total_cost'], 2); ?></span>
+                            </div>
+                            
+                            <div class="ad-detail-row">
+                                <strong>Payment:</strong>
+                                <span>
+                                    <?php if ($ad['is_paid']): ?>
+                                        <span class="status-badge status-approved">PAID</span>
+                                    <?php else: ?>
+                                        <span class="status-badge status-rejected">UNPAID</span>
+                                        <small style="display: block; color: var(--gray-500); margin-top: 4px;">Wait for admin to mark as paid after verification</small>
+                                    <?php endif; ?>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <?php if ($ad['admin_notes']): ?>
+                            <div class="ad-notes">
+                                <strong>Admin Notes:</strong><br>
+                                <?php echo htmlspecialchars($ad['admin_notes']); ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div class="ad-actions">
+                        <a href="edit_advertisement.php?id=<?php echo $ad['id']; ?>" class="btn-edit">
+                            ✏️ Edit
+                        </a>
+                        
+                        <form action="update_advertisement_status.php" method="POST" 
+                              onsubmit="return confirm('Are you sure you want to delete this advertisement?');">
+                            <input type="hidden" name="ad_id" value="<?php echo $ad['id']; ?>">
+                            <input type="hidden" name="action" value="delete">
+                            <button type="submit" class="btn-delete-ad">🗑️ Delete</button>
+                        </form>
+                    </div>
+                </div>
+            <?php endwhile; ?>
         <?php else: ?>
-            <p style="text-align: center; color: #666; padding: 40px 20px;">
-                No advertisements submitted yet.
-                <br><br>
-                <a href="submit_advertisement.php">
-                    <button style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-                        ➕ Submit Your First Ad
-                    </button>
-                </a>
-            </p>
+            <div class="box" style="padding: 40px; text-align: center;">
+                <p style="color: #666; margin-bottom: 20px;">No <?php echo $filter; ?> advertisements found.</p>
+                <?php if ($filter !== 'pending'): ?>
+                    <a href="?filter=pending" style="color: var(--primary); font-weight: 600;">View Pending Ads</a>
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
     </div>
 
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

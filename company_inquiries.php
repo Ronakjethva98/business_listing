@@ -76,10 +76,12 @@ if (count($businesses) > 0) {
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
-            <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
-        </div>
-        <div class="navbar-menu">
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
+            <div class="navbar-menu">
+                <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
             <a href="dashboard.php">🏠 Home</a>
             
             <?php if ($_SESSION['role'] === 'company') { ?>
@@ -120,7 +122,7 @@ if (count($businesses) > 0) {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>🏢 Business</th>
+                        <th>Business</th>
                         <th>👤 Customer Name</th>
                         <th>📧 Email</th>
                         <th>📱 Phone</th>
@@ -132,15 +134,15 @@ if (count($businesses) > 0) {
                 <tbody>
                     <?php $i = 1; while ($row = mysqli_fetch_assoc($result)) { ?>
                         <tr>
-                            <td class="inquiry-id"><?php echo $i++; ?></td>
-                            <td class="business-name"><?php echo htmlspecialchars($row['business_name']); ?></td>
-                            <td><?php echo htmlspecialchars($row['name']); ?></td>
-                            <td class="email-cell"><?php echo htmlspecialchars($row['email']); ?></td>
-                            <td><?php echo htmlspecialchars($row['phone'] ?: '-'); ?></td>
-                            <td class="message-cell" title="<?php echo htmlspecialchars($row['message']); ?>">
+                            <td class="inquiry-id" data-label="#"><?php echo $i++; ?></td>
+                            <td class="business-name" data-label="Business"><?php echo htmlspecialchars($row['business_name']); ?></td>
+                            <td data-label="Customer"><?php echo htmlspecialchars($row['name']); ?></td>
+                            <td class="email-cell" data-label="Email"><?php echo htmlspecialchars($row['email']); ?></td>
+                            <td data-label="Phone"><?php echo htmlspecialchars($row['phone'] ?: '-'); ?></td>
+                            <td class="message-cell" data-label="Message" title="<?php echo htmlspecialchars($row['message']); ?>">
                                 <?php echo htmlspecialchars($row['message']); ?>
                             </td>
-                            <td>
+                            <td data-label="Date">
                                 <span class="date-badge">
                                     <?php
                                     echo isset($row['created_at'])
@@ -169,6 +171,8 @@ if (count($businesses) > 0) {
     </div>
 
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

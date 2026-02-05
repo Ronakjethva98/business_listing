@@ -67,7 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <div class="navbar-user"><?php echo ucfirst($_SESSION['role']); ?></div>
                 <a href="dashboard.php">Home</a>
@@ -142,6 +145,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
 
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>

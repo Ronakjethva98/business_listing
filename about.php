@@ -167,7 +167,10 @@ $userRole = $_SESSION['role'] ?? 'normal';
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-header">
-            <div class="navbar-brand">Business Portal</div>
+            <div class="navbar-brand">
+                <img src="assets/logo.png" alt="Logo" class="navbar-logo">
+                Business Portal
+            </div>
             <div class="navbar-menu">
                 <?php if (!$isLoggedIn) { ?>
                     <a href="index.php">Home</a>
@@ -206,7 +209,7 @@ $userRole = $_SESSION['role'] ?? 'normal';
 <!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-container">
-        About Us - How to Use
+        ℹ️ About Us - How to Use
     </div>
 </div>
 
@@ -220,7 +223,7 @@ $userRole = $_SESSION['role'] ?? 'normal';
         
         <!-- Welcome Section -->
         <div class="about-section">
-            <h2>Welcome to Business Listing Portal</h2>
+            <h2>🏠 Welcome to Business Portal</h2>
             <p>
                 Our Business Listing Portal is a comprehensive platform designed to connect businesses with potential customers. 
                 Whether you're looking for services, managing your business presence, or administering the platform, 
@@ -287,7 +290,7 @@ $userRole = $_SESSION['role'] ?? 'normal';
             </div>
 
             <div class="user-type-card">
-                <h4>🏢 Company Users</h4>
+                <h4>Company Users</h4>
                 <p><strong>What you can do:</strong></p>
                 <ul>
                     <li>Create an account by clicking "Company Login" and then registering</li>
@@ -424,6 +427,8 @@ $userRole = $_SESSION['role'] ?? 'normal';
 
     </div>
 </div>
+
+<?php include "footer.php"; ?>
 
 </body>
 </html>
